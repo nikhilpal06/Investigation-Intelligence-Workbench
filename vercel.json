@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/investigation_platform_v4.html" }
+  ]
+}
