@@ -456,7 +456,7 @@ textarea:focus{border-color:#1D9E75}
 
 <script>
 // ── STATE ────────────────────────────────────────────────────────────────────
-const BACKEND = 'web-production-cdad3.up.railway.app';
+const BACKEND = 'https://web-production-cdad3.up.railway.app';
 const API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL   = 'claude-sonnet-4-20250514';
 const SYS = `You are an expert GMP deviation investigator, QA reviewer, and Lean Six Sigma Black Belt. Support a human investigator — do not make final decisions. Never invent facts. If evidence is missing say "Evidence not found." Separate facts from assumptions. Use GMP language. Cite source document name and page number for every key fact. Never blame human error without specific documented evidence. Respond ONLY with valid compact JSON — no markdown fences, no preamble.`;
