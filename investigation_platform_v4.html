@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Investigation Intelligence Workbench</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F4F0;color:#1A1917;font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+/* DISCLAIMER BAR */
+.disclaimer{background:#FEF3C7;border-bottom:1px solid #F59E0B;padding:7px 20px;font-size:11px;color:#78350F;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.disclaimer strong{font-weight:700}
+/* TOPBAR */
+.tb{background:#fff;border-bottom:1px solid #E5E3DC;padding:0 18px;height:48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:32px;z-index:99}
+.tb-left{display:flex;align-items:center;gap:10px}
+.logo{width:30px;height:30px;background:#1D9E75;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.app-name{font-size:13px;font-weight:700}
+.app-sub{font-size:10px;color:#888780;margin-top:1px}
+.tb-chips{display:flex;gap:5px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:16px;font-size:11px;font-weight:700;border:1px solid #E5E3DC;background:#F5F4F0;color:#888780}
+.chip.g{background:#E1F5EE;border-color:#9FE1CB;color:#085041}
+.chip.a{background:#FAEEDA;border-color:#FAC775;color:#633806}
+.chip.r{background:#FCEBEB;border-color:#F09595;color:#791F1F}
+/* BODY */
+.body{display:flex;flex:1}
+/* SIDEBAR */
+.sb{width:188px;background:#fff;border-right:1px solid #E5E3DC;padding:9px 7px;flex-shrink:0;position:sticky;top:80px;height:calc(100vh - 80px);overflow-y:auto;display:flex;flex-direction:column}
+.ni{display:flex;align-items:center;gap:7px;padding:6px 7px;border-radius:7px;cursor:pointer;border:none;background:none;text-align:left;width:100%;transition:background 0.1s;position:relative;font-family:inherit}
+.ni:hover{background:#F5F4F0}
+.ni.active{background:#F5F4F0}
+.ni-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:#F5F4F0;color:#888780}
+.ni.active .ni-ic,.ni.done .ni-ic{background:#E1F5EE;color:#1D9E75}
+.ni-lbl{font-size:11px;color:#888780;line-height:1.25;flex:1}
+.ni.active .ni-lbl{color:#1A1917;font-weight:700}
+.ni-bdg{font-size:9px;padding:1px 4px;border-radius:7px;font-weight:700}
+.ni-bdg.w{background:#FAEEDA;color:#854F0B}
+.ni-bdg.r{background:#FCEBEB;color:#A32D2D}
+.sep{height:1px;background:#E5E3DC;margin:4px 0}
+.sb-bottom{margin-top:auto;padding-top:8px}
+.sb-widget{border:1px solid #E5E3DC;border-radius:8px;padding:10px;background:#F5F4F0}
+.sw-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:3px}
+.sw-num{font-size:20px;font-weight:700;line-height:1;margin-bottom:4px}
+.sw-bar{height:3px;background:#E5E3DC;border-radius:2px;overflow:hidden;margin-bottom:6px}
+.sw-fill{height:100%;border-radius:2px;transition:width 1.2s}
+/* MAIN */
+.main{flex:1;padding:20px 22px;overflow-y:auto}
+.pg{display:none}
+.pg.active{display:block}
+.pg-title{font-size:17px;font-weight:700;margin-bottom:3px}
+.pg-sub{font-size:12px;color:#888780;margin-bottom:14px}
+/* UPLOAD */
+.drop-zone{border:2px dashed #D3D1C7;border-radius:12px;padding:22px;text-align:center;cursor:pointer;background:#fff;transition:all .15s;position:relative;margin-bottom:10px}
+.drop-zone:hover,.drop-zone.over{border-color:#1D9E75;background:#E1F5EE}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:28px;margin-bottom:8px}
+.dz-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.dz-sub{font-size:11px;color:#888780}
+/* FILE STATUS CARDS */
+.file-cards{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.file-card{background:#fff;border:1px solid #E5E3DC;border-radius:9px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start}
+.fc-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.fc-body{flex:1;min-width:0}
+.fc-name{font-size:12px;font-weight:700;color:#1A1917;margin-bottom:3px;word-break:break-word}
+.fc-meta{font-size:11px;color:#888780}
+.fc-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;margin-top:4px}
+.fcb-ok{background:#E1F5EE;color:#085041}
+.fcb-warn{background:#FAEEDA;color:#633806}
+.fcb-err{background:#FCEBEB;color:#791F1F}
+.fc-remove{cursor:pointer;color:#888780;font-size:18px;line-height:1;flex-shrink:0;background:none;border:none;padding:0}
+.fc-remove:hover{color:#E24B4A}
+/* PREVIEW BOX */
+.preview-wrap{border:1px solid #9FE1CB;border-radius:9px;background:#F8FDFB;margin-bottom:12px;overflow:hidden}
+.preview-hdr{padding:8px 12px;background:#E1F5EE;border-bottom:1px solid #9FE1CB;display:flex;align-items:center;justify-content:space-between}
+.preview-hdr-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#085041}
+.preview-hdr-meta{font-size:10px;color:#0F6E56}
+.preview-body{padding:10px 13px;max-height:140px;overflow-y:auto;font-size:11px;font-family:monospace;line-height:1.6;color:#1A1917;white-space:pre-wrap;word-break:break-word}
+/* FORMS */
+textarea{width:100%;border:1px solid #E5E3DC;border-radius:8px;padding:9px 11px;font-size:12px;font-family:inherit;color:#1A1917;background:#fff;resize:vertical;outline:none;line-height:1.65}
+textarea:focus{border-color:#1D9E75}
+.fl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;display:block;margin-bottom:5px}
+/* BUTTONS */
+.btn{padding:8px 15px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E3DC}
+.btn-p{background:#1D9E75;border-color:#0F6E56;color:#fff}
+.btn-p:hover{background:#0F6E56}
+.btn-p:disabled{background:#9FE1CB;border-color:#9FE1CB;cursor:not-allowed;opacity:.7}
+.btn-s{background:#fff;color:#1A1917}
+.btn-s:hover{background:#F5F4F0}
+/* ALERTS */
+.alert{border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:10px;display:flex;gap:8px;line-height:1.6;align-items:flex-start}
+.al-i{background:#E6F1FB;color:#0C447C;border:1px solid #B5D4F4}
+.al-w{background:#FAEEDA;color:#633806;border:1px solid #FAC775}
+.al-g{background:#E1F5EE;color:#085041;border:1px solid #9FE1CB}
+.al-r{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+/* EXEC SUMMARY */
+.exec-card{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:18px 20px;margin-bottom:13px}
+.exec-id{font-size:21px;font-weight:700;margin-bottom:12px}
+.score-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
+.score-box{border:1px solid #E5E3DC;border-radius:10px;padding:12px 14px}
+.sb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:4px}
+.sb-num{font-size:32px;font-weight:700;line-height:1;margin-bottom:3px}
+.sb-sub{font-size:10px;color:#888780;margin-bottom:7px}
+.sb-bar{height:3px;background:#E5E3DC;border-radius:2px;overflow:hidden}
+.sb-fill{height:100%;border-radius:2px;transition:width 1.2s}
+.closure-tag{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:9px;font-size:13px;font-weight:700;margin-bottom:14px}
+.ct-block{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+.ct-caution{background:#FAEEDA;color:#633806;border:1px solid #FAC775}
+.ct-ready{background:#E1F5EE;color:#085041;border:1px solid #9FE1CB}
+/* DO NOT CLOSE UNTIL */
+.dncu{background:#FCEBEB;border:1px solid #F09595;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.dncu-title{font-size:13px;font-weight:700;color:#791F1F;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.dncu-item{display:flex;gap:8px;font-size:12px;color:#791F1F;padding:5px 0;border-bottom:1px solid rgba(240,149,149,.3)}
+.dncu-item:last-child{border-bottom:none}
+.dncu-n{font-size:11px;font-weight:700;min-width:18px;margin-top:1px}
+/* SCORE BREAKDOWN PAGE */
+.score-2col{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}
+.score-card{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:16px 18px}
+.sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:5px}
+.sc-big{font-size:40px;font-weight:700;line-height:1;margin-bottom:4px}
+.sc-status{font-size:11px;color:#888780;margin-bottom:10px}
+.sc-bar{height:5px;background:#E5E3DC;border-radius:3px;overflow:hidden;margin-bottom:12px}
+.sc-fill{height:100%;border-radius:3px;transition:width 1.2s}
+.dim-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px}
+.dim-lbl{color:#888780;min-width:140px}
+.dim-track{flex:1;height:4px;background:#E5E3DC;border-radius:2px;overflow:hidden}
+.dim-fill{height:100%;border-radius:2px}
+.dim-val{min-width:30px;text-align:right;font-weight:700;font-size:10px}
+.ai-comment{background:#F5F4F0;border:1px solid #E5E3DC;border-radius:8px;padding:10px 13px;margin-top:10px}
+.ai-com-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:5px}
+.ai-com-txt{font-size:12px;color:#1A1917;line-height:1.7}
+/* TIMELINE */
+.tl-row{display:flex;gap:11px;padding:8px 0;border-bottom:1px solid #F5F4F0}
+.tl-time{font-size:11px;font-weight:700;font-family:monospace;min-width:90px;color:#1A1917;margin-top:1px}
+.tl-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.tl-dot.n{background:#1D9E75}.tl-dot.w{background:#EF9F27}.tl-dot.c{background:#E24B4A}
+.tl-body{flex:1}
+.tl-event{font-size:12px;color:#1A1917;line-height:1.5}
+.tl-src{font-size:10px;color:#378ADD;margin-top:2px;display:flex;align-items:center;gap:4px}
+.tl-src-badge{font-size:9px;padding:1px 6px;border-radius:6px;background:#E6F1FB;color:#0C447C;font-weight:700}
+/* EVIDENCE MAP */
+.ev-section{margin-bottom:18px}
+.ev-section-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.ev-count{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:700}
+.ev-card{background:#fff;border:1px solid #E5E3DC;border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;gap:11px}
+.ev-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.ev-body{flex:1}
+.ev-fact{font-size:12px;font-weight:700;color:#1A1917;margin-bottom:5px;line-height:1.4}
+.ev-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ev-src-group{display:flex;align-items:center;gap:4px;font-size:10px;color:#888780}
+.src-tag{font-size:9px;padding:2px 6px;border-radius:6px;background:#E6F1FB;color:#0C447C;font-weight:700}
+.conf-pill{font-size:9px;padding:2px 6px;border-radius:7px;font-weight:700}
+.cp-h{background:#E1F5EE;color:#085041}
+.cp-m{background:#FAEEDA;color:#633806}
+.cp-l{background:#FCEBEB;color:#791F1F}
+.blocker-pill{font-size:9px;padding:2px 6px;border-radius:7px;background:#FCEBEB;color:#A32D2D;font-weight:700}
+/* GRAPH */
+.graph-wrap{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:16px;margin-bottom:12px}
+.graph-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px;padding-top:9px;border-top:1px solid #F5F4F0}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#888780}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+/* GAPS */
+.closure-banner{border-radius:11px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;gap:13px}
+.gap-card{background:#fff;border:1px solid #E5E3DC;border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;gap:11px}
+.gap-sev{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.gs-H{background:#FCEBEB;color:#A32D2D}
+.gs-M{background:#FAEEDA;color:#854F0B}
+.gs-L{background:#E1F5EE;color:#0F6E56}
+.gap-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.gap-why{font-size:11px;color:#888780;line-height:1.5}
+/* RCA */
+.rca-path-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:13px 15px;margin-bottom:9px}
+.rca-hdr{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.rca-num{width:22px;height:22px;border-radius:50%;background:#F5F4F0;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#888780;flex-shrink:0}
+.rca-title{font-size:13px;font-weight:700;flex:1;line-height:1.3}
+.conf-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.cc-H{background:#E1F5EE;color:#085041;border:2px solid #1D9E75}
+.cc-M{background:#FAEEDA;color:#633806;border:2px solid #EF9F27}
+.cc-L{background:#FCEBEB;color:#791F1F;border:2px solid #E24B4A}
+.rca-ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:9px}
+.rca-ev-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.lbl-for{color:#0F6E56}.lbl-ag{color:#854F0B}
+.rca-ev-item{display:flex;gap:5px;font-size:11px;color:#1A1917;margin-bottom:4px;line-height:1.4}
+.rca-ev-item.miss{color:#888780}
+.rca-next{font-size:11px;color:#378ADD;padding-top:8px;border-top:1px solid #F5F4F0;display:flex;align-items:center;gap:5px}
+/* GMP DEFENSIBILITY */
+.def-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;margin-bottom:9px;overflow:hidden}
+.def-hdr{padding:11px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #F5F4F0}
+.def-sev{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.di-H{background:#FCEBEB;color:#A32D2D}
+.di-M{background:#FAEEDA;color:#854F0B}
+.di-L{background:#E6F1FB;color:#0C447C}
+.def-concern{font-size:12px;font-weight:700;flex:1}
+.def-sev-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;flex-shrink:0}
+.def-body{padding:10px 14px;font-size:11px;color:#888780;line-height:1.6}
+.def-ref{margin-top:6px;padding-top:6px;border-top:1px solid #F5F4F0;font-size:10px;font-style:italic;display:flex;align-items:center;gap:5px}
+/* SIMILAR */
+.sim-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:12px 15px;margin-bottom:8px}
+.sim-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.sim-id{font-size:11px;font-weight:700;color:#378ADD;font-family:monospace}
+.sim-pct{font-size:12px;font-weight:700;color:#1D9E75}
+.sim-rc{font-size:13px;font-weight:700;margin-bottom:4px}
+.sim-meta{display:flex;gap:9px;font-size:11px;color:#888780;flex-wrap:wrap}
+.repeat-banner{background:#EEEDFE;border:1px solid #AFA9EC;border-radius:11px;padding:13px 15px;margin-bottom:13px;display:flex;gap:11px}
+/* CAPA */
+.capa-header-note{font-size:11px;color:#888780;font-style:italic;margin-bottom:10px}
+.capa-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:13px 15px;margin-bottom:8px}
+.capa-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.capa-opt-lbl{font-size:11px;font-weight:700;color:#888780;min-width:80px}
+.capa-action{font-size:13px;font-weight:700;flex:1}
+.type-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700}
+.tt-C{background:#E6F1FB;color:#0C447C}
+.tt-P{background:#E1F5EE;color:#085041}
+.prio-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700}
+.pt-H{background:#FCEBEB;color:#A32D2D}
+.pt-M{background:#FAEEDA;color:#854F0B}
+.pt-L{background:#E1F5EE;color:#085041}
+.capa-metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
+.cm{background:#F5F4F0;border-radius:7px;padding:7px 10px}
+.cm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:2px}
+.cm-val{font-size:12px;font-weight:700}
+.capa-rationale{font-size:11px;color:#888780;line-height:1.6}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid #E5E3DC;margin-bottom:14px}
+.tab{padding:6px 12px;font-size:11px;cursor:pointer;color:#888780;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;font-weight:600;transition:all .1s}
+.tab:hover{color:#1A1917}
+.tab.active{color:#1D9E75;border-bottom:2px solid #1D9E75;font-weight:700}
+.tp{display:none}
+.tp.active{display:block}
+/* FIELD BLOCKS */
+.fld{margin-bottom:11px}
+.fld-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:5px}
+.fld-val{font-size:12px;line-height:1.7;background:#F5F4F0;border:1px solid #E5E3DC;border-radius:8px;padding:10px 13px;white-space:pre-wrap;word-break:break-word}
+.fld-val.hi{background:#F8FDFB;border-color:#9FE1CB}
+/* Q ITEMS */
+.q-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #F5F4F0;font-size:12px;line-height:1.5}
+.q-n{width:20px;height:20px;border-radius:50%;background:#F5F4F0;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#888780;flex-shrink:0;margin-top:1px}
+/* EXPORT */
+.ex-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:18px}
+.ex-tile{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:16px 11px;text-align:center;cursor:pointer;transition:all .12s}
+.ex-tile:hover{border-color:#1D9E75;background:#E1F5EE}
+.ex-tile-icon{font-size:26px;margin-bottom:8px}
+.ex-tile-nm{font-size:12px;font-weight:700;margin-bottom:2px}
+.ex-tile-sub{font-size:10px;color:#888780}
+/* LOADING */
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 20px;color:#888780;gap:12px}
+.spin{width:24px;height:24px;border:2.5px solid #E5E3DC;border-top-color:#1D9E75;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.load-msg{font-size:13px;font-weight:600;color:#1A1917}
+/* NAV ACTIONS */
+.pg-actions{display:flex;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid #E5E3DC}
+/* SOURCE TRACE */
+.src-trace{font-size:10px;color:#888780;display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
+.src-doc{font-size:9px;padding:1px 6px;border-radius:5px;background:#F5F4F0;border:1px solid #E5E3DC;color:#888780}
+.src-pg{font-size:9px;padding:1px 6px;border-radius:5px;background:#E6F1FB;border:1px solid #B5D4F4;color:#0C447C}
+.src-sec{font-size:9px;padding:1px 6px;border-radius:5px;background:#EEEDFE;border:1px solid #AFA9EC;color:#26215C}
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER BAR -->
+<div class="disclaimer">
+  ⚠️ <strong>Decision-support tool only.</strong> All outputs are AI-assisted drafts. Human QA review and approval required before entry into any GMP record system. Not a substitute for qualified investigator judgment.
+</div>
+
+<!-- TOPBAR -->
+<div class="tb">
+  <div class="tb-left">
+    <div class="logo">🔬</div>
+    <div>
+      <div class="app-name">Investigation Intelligence Workbench</div>
+      <div class="app-sub" id="tb-status">No case loaded · upload PDF or paste text</div>
+    </div>
+  </div>
+  <div class="tb-chips" id="tb-chips">
+    <button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="resetAll()">↺ New case</button>
+  </div>
+</div>
+
+<div class="body">
+<!-- SIDEBAR -->
+<div class="sb">
+  <button class="ni active" id="ni1" onclick="goPg(1)"><div class="ni-ic">⬆</div><div class="ni-lbl">Upload / run</div></button>
+  <div class="sep"></div>
+  <button class="ni" id="ni2" onclick="goPg(2)"><div class="ni-ic">📋</div><div class="ni-lbl">Executive summary</div></button>
+  <button class="ni" id="ni3" onclick="goPg(3)"><div class="ni-ic">📊</div><div class="ni-lbl">Readiness scores</div></button>
+  <div class="sep"></div>
+  <button class="ni" id="ni4" onclick="goPg(4)"><div class="ni-ic">⏱</div><div class="ni-lbl">Event timeline</div></button>
+  <button class="ni" id="ni5" onclick="goPg(5)"><div class="ni-ic">🗺</div><div class="ni-lbl">Evidence map</div></button>
+  <button class="ni" id="ni6" onclick="goPg(6)"><div class="ni-ic">🕸</div><div class="ni-lbl">Evidence graph</div></button>
+  <button class="ni" id="ni7" onclick="goPg(7)"><div class="ni-ic">⛔</div><div class="ni-lbl">Do not close until</div><span class="ni-bdg r" id="gap-bdg" style="display:none">0</span></button>
+  <div class="sep"></div>
+  <button class="ni" id="ni8" onclick="goPg(8)"><div class="ni-ic">🧠</div><div class="ni-lbl">RCA workbench</div></button>
+  <button class="ni" id="ni9" onclick="goPg(9)"><div class="ni-ic">🛡</div><div class="ni-lbl">GMP defensibility</div><span class="ni-bdg r" id="fda-bdg" style="display:none">0</span></button>
+  <button class="ni" id="ni10" onclick="goPg(10)"><div class="ni-ic">🕐</div><div class="ni-lbl">Similar cases</div></button>
+  <button class="ni" id="ni11" onclick="goPg(11)"><div class="ni-ic">✅</div><div class="ni-lbl">CAPA options</div></button>
+  <div class="sep"></div>
+  <button class="ni" id="ni12" onclick="goPg(12)"><div class="ni-ic">⬇</div><div class="ni-lbl">Export</div></button>
+  <div class="sb-bottom" id="sb-bottom" style="display:none">
+    <div class="sb-widget">
+      <div class="sw-lbl">Readiness</div>
+      <div class="sw-num" id="sw-r">—</div>
+      <div class="sw-bar"><div class="sw-fill" id="sw-r-bar" style="width:0%"></div></div>
+      <div class="sw-lbl">Quality</div>
+      <div class="sw-num" id="sw-q">—</div>
+      <div class="sw-bar"><div class="sw-fill" id="sw-q-bar" style="width:0%"></div></div>
+      <div style="font-size:10px;color:#888780;margin-top:4px" id="sw-status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- PG 1: UPLOAD -->
+<div class="pg active" id="pg-1">
+  <div class="pg-title">Upload case documents</div>
+  <div class="pg-sub">Upload PDF files or paste text. Server-side PDF extraction with page-level source traceability.</div>
+
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dz">
+    <input type="file" id="fi" multiple accept=".pdf,.txt,.csv" onchange="handleFiles(this.files)">
+    <div class="dz-icon">📁</div>
+    <div class="dz-title">Drop files here or click to browse</div>
+    <div class="dz-sub">PDF · TXT · CSV · Multiple files supported · Text extracted automatically</div>
+  </div>
+
+  <!-- File status cards -->
+  <div class="file-cards" id="file-cards"></div>
+
+  <!-- Paste area -->
+  <div style="margin-bottom:10px">
+    <label class="fl">Paste text (required if PDF extraction fails — also use for additional context)</label>
+    <textarea id="paste-in" rows="6" placeholder="Paste deviation text, investigation notes, or any relevant content here…"></textarea>
+  </div>
+  <div style="margin-bottom:13px">
+    <label class="fl">Investigator notes (optional)</label>
+    <textarea id="extra-in" rows="2" placeholder="Known hypotheses, team context, prior similar events…"></textarea>
+  </div>
+
+  <div class="alert al-i">ℹ️ PDF files are sent to a local extraction server (port 8100) to extract text. The extracted text is then sent to the Claude API for analysis. If the backend is not running, upload TXT files or use the paste area.</div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="font-size:11px;color:#888780" id="upload-count">No files loaded</div>
+    <button class="btn btn-p" id="run-btn" onclick="runAll()">🧠 Run investigation analysis</button>
+  </div>
+</div>
+
+<!-- PG 2: EXEC SUMMARY -->
+<div class="pg" id="pg-2">
+  <div class="pg-title">Executive summary</div>
+  <div class="pg-sub">30-second view for QA leadership — scores, closure status, key findings</div>
+  <div id="exec-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><div></div><div><button class="btn btn-s" onclick="goPg(3)">Readiness scores →</button></div></div>
+</div>
+
+<!-- PG 3: READINESS SCORES -->
+<div class="pg" id="pg-3">
+  <div class="pg-title">Readiness &amp; quality scores</div>
+  <div class="pg-sub">Completeness vs. investigation quality — with dimension breakdowns</div>
+  <div id="rd-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(2)">← Summary</button><div><button class="btn btn-s" onclick="goPg(4)">Timeline →</button></div></div>
+</div>
+
+<!-- PG 4: TIMELINE -->
+<div class="pg" id="pg-4">
+  <div class="pg-title">Event timeline</div>
+  <div class="pg-sub">Chronological reconstruction with document source references</div>
+  <div id="tl-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(3)">← Scores</button><div><button class="btn btn-s" onclick="goPg(5)">Evidence map →</button></div></div>
+</div>
+
+<!-- PG 5: EVIDENCE MAP -->
+<div class="pg" id="pg-5">
+  <div class="pg-title">Evidence map</div>
+  <div class="pg-sub">Confirmed facts · assumptions · missing evidence · conflicts — source-traced</div>
+  <div id="ev-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(4)">← Timeline</button><div><button class="btn btn-s" onclick="goPg(6)">Evidence graph →</button></div></div>
+</div>
+
+<!-- PG 6: EVIDENCE GRAPH -->
+<div class="pg" id="pg-6">
+  <div class="pg-title">Evidence graph</div>
+  <div class="pg-sub">Causal relationship map between deviation factors</div>
+  <div id="gr-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(5)">← Evidence map</button><div><button class="btn btn-s" onclick="goPg(7)">Do not close until →</button></div></div>
+</div>
+
+<!-- PG 7: DO NOT CLOSE UNTIL -->
+<div class="pg" id="pg-7">
+  <div class="pg-title">Do not close until</div>
+  <div class="pg-sub">Mandatory resolution items before this investigation can be closed</div>
+  <div id="gap-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(6)">← Graph</button><div><button class="btn btn-s" onclick="goPg(8)">RCA workbench →</button></div></div>
+</div>
+
+<!-- PG 8: RCA WORKBENCH -->
+<div class="pg" id="pg-8">
+  <div class="pg-title">RCA workbench</div>
+  <div class="pg-sub">Candidate paths with evidence-based confidence — no final answer, only hypotheses for investigator review</div>
+  <div class="tabs">
+    <button class="tab active" onclick="swTab(event,'rca-paths')">Candidate RCA paths</button>
+    <button class="tab" onclick="swTab(event,'rca-narrative')">Investigation narrative</button>
+    <button class="tab" onclick="swTab(event,'rca-questions')">Open questions</button>
+  </div>
+  <div id="rca-paths" class="tp active"><div class="loading-state"><div class="load-msg">Run analysis first</div></div></div>
+  <div id="rca-narrative" class="tp"><div class="loading-state"><div class="load-msg">Run analysis first</div></div></div>
+  <div id="rca-questions" class="tp"><div class="loading-state"><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(7)">← Do not close until</button><div><button class="btn btn-s" onclick="goPg(9)">GMP defensibility →</button></div></div>
+</div>
+
+<!-- PG 9: GMP DEFENSIBILITY -->
+<div class="pg" id="pg-9">
+  <div class="pg-title">GMP defensibility review</div>
+  <div class="pg-sub">Would an inspector challenge this? Potential findings with regulatory references</div>
+  <div id="def-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(8)">← RCA workbench</button><div><button class="btn btn-s" onclick="goPg(10)">Similar cases →</button></div></div>
+</div>
+
+<!-- PG 10: SIMILAR CASES -->
+<div class="pg" id="pg-10">
+  <div class="pg-title">Similar cases</div>
+  <div class="pg-sub">Historical patterns and repeat event detection</div>
+  <div id="sim-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(9)">← GMP defensibility</button><div><button class="btn btn-s" onclick="goPg(11)">CAPA options →</button></div></div>
+</div>
+
+<!-- PG 11: CAPA OPTIONS -->
+<div class="pg" id="pg-11">
+  <div class="pg-title">CAPA options</div>
+  <div class="pg-sub">Options for QA consideration — not recommendations. CAPA selection is a human QA decision.</div>
+  <div class="alert al-w">⚠️ These are options only. The final CAPA design must be determined by a qualified QA professional based on confirmed root cause and risk assessment. Do not implement without QA review.</div>
+  <div id="capa-out"><div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div></div>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(10)">← Similar cases</button><div><button class="btn btn-p" onclick="goPg(12)">Export →</button></div></div>
+</div>
+
+<!-- PG 12: EXPORT -->
+<div class="pg" id="pg-12">
+  <div class="pg-title">Export investigation package</div>
+  <div class="pg-sub">Download for QMS entry, Word editing, stakeholder review, or regulatory submission</div>
+  <div class="alert al-w">⚠️ AI-assisted draft — qualified QA review and approval required before entry into any GMP record.</div>
+  <div class="ex-grid">
+    <div class="ex-tile" onclick="exportWord()"><div class="ex-tile-icon">📄</div><div class="ex-tile-nm">Word / Text</div><div class="ex-tile-sub">Numbered .txt</div></div>
+    <div class="ex-tile" onclick="exportJSON()"><div class="ex-tile-icon">{ }</div><div class="ex-tile-nm">JSON</div><div class="ex-tile-sub">QMS API / database</div></div>
+    <div class="ex-tile" onclick="exportCSV()"><div class="ex-tile-icon">📊</div><div class="ex-tile-nm">Evidence CSV</div><div class="ex-tile-sub">Facts + gaps table</div></div>
+    <div class="ex-tile" onclick="copyAll()"><div class="ex-tile-icon">📋</div><div class="ex-tile-nm">Copy all</div><div class="ex-tile-sub">Paste into QMS</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
+    <div class="fl" style="margin:0">Full investigation package preview</div>
+    <button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="window.print()">🖨 Print / PDF</button>
+  </div>
+  <pre id="export-preview" style="background:#fff;border:1px solid #E5E3DC;border-radius:9px;padding:14px;font-size:10px;font-family:monospace;line-height:1.7;max-height:380px;overflow-y:auto;white-space:pre-wrap;word-break:break-word">Run analysis first.</pre>
+  <div class="pg-actions"><button class="btn btn-s" onclick="goPg(11)">← CAPA options</button><div></div></div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /body -->
+
+<script>
+// ── STATE ────────────────────────────────────────────────────────────────────
+const BACKEND = 'https://investigation-workbench.up.railway.app';
+const API_URL = 'https://api.anthropic.com/v1/messages';
+const MODEL   = 'claude-sonnet-4-20250514';
+const SYS = `You are an expert GMP deviation investigator, QA reviewer, and Lean Six Sigma Black Belt. Support a human investigator — do not make final decisions. Never invent facts. If evidence is missing say "Evidence not found." Separate facts from assumptions. Use GMP language. Cite source document name and page number for every key fact. Never blame human error without specific documented evidence. Respond ONLY with valid compact JSON — no markdown fences, no preamble.`;
+
+let D = {};
+let uploadedFiles = []; // {name, extractedText, pages, totalPages, success, error}
+
+// ── DRAG & DROP ──────────────────────────────────────────────────────────────
+const dz = document.getElementById('dz');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); handleFiles(e.dataTransfer.files); });
+
+async function handleFiles(fileList) {
+  for (const file of fileList) {
+    if (uploadedFiles.find(f => f.name === file.name)) continue;
+    const entry = { name: file.name, extractedText: '', pages: [], totalPages: 0, success: false, error: null, processing: true };
+    uploadedFiles.push(entry);
+    renderFileCards();
+
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`${BACKEND}/extract`, { method: 'POST', body: fd });
+      const data = await res.json();
+
+      entry.success = data.success;
+      entry.extractedText = data.full_text || '';
+      entry.preview = data.preview || '';
+      entry.pages = data.pages || [];
+      entry.totalPages = data.total_pages || 0;
+      entry.error = data.error || null;
+      entry.is_scanned = data.is_scanned || false;
+
+      if (!data.success && data.error) {
+        // If backend unavailable, fall back to browser text extraction
+        if (!res.ok || res.status === 0) {
+          entry.error = 'Backend not available. For PDF files, please paste text manually.';
+        }
+      }
+    } catch(e) {
+      // Backend not running — handle gracefully
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        entry.error = 'PDF extraction server not running. Please paste the case text manually in the text area below.';
+      } else {
+        try {
+          const text = await file.text();
+          entry.extractedText = text.slice(0, 20000);
+          entry.preview = text.slice(0, 1500);
+          entry.success = true;
+          entry.totalPages = 1;
+          entry.pages = [{page_num: 1, section: 'Document', text: entry.extractedText, char_count: entry.extractedText.length}];
+        } catch(e2) {
+          entry.error = 'Could not read file: ' + e2.message;
+        }
+      }
+    }
+
+    entry.processing = false;
+    renderFileCards();
+    updateUploadCount();
+  }
+}
+
+function removeFile(name) {
+  uploadedFiles = uploadedFiles.filter(f => f.name !== name);
+  renderFileCards();
+  updateUploadCount();
+}
+
+function renderFileCards() {
+  const el = document.getElementById('file-cards');
+  if (!uploadedFiles.length) { el.innerHTML = ''; return; }
+  el.innerHTML = uploadedFiles.map(f => {
+    let badge, preview = '';
+    if (f.processing) {
+      badge = '<span class="fc-badge fcb-warn">⏳ Extracting…</span>';
+    } else if (f.success) {
+      const chars = f.extractedText.length;
+      badge = `<span class="fc-badge fcb-ok">✓ Extracted — ${f.totalPages}p · ${chars.toLocaleString()} chars</span>`;
+      if (f.preview) {
+        preview = `<div class="preview-wrap" style="margin-top:8px">
+          <div class="preview-hdr"><span class="preview-hdr-lbl">Extracted text preview</span><span class="preview-hdr-meta">${f.totalPages} page(s) · source-tagged</span></div>
+          <div class="preview-body">${esc(f.preview.slice(0,600))}…</div>
+        </div>`;
+      }
+    } else if (f.is_scanned) {
+      badge = '<span class="fc-badge fcb-err">⚠ Scanned PDF — no text layer. Paste text below.</span>';
+    } else if (f.error) {
+      badge = `<span class="fc-badge fcb-err">✗ ${esc(f.error.slice(0,80))}</span>`;
+    } else {
+      badge = '<span class="fc-badge fcb-warn">—</span>';
+    }
+    return `<div class="file-card">
+      <div class="fc-icon">${f.name.endsWith('.pdf') ? '📋' : '📄'}</div>
+      <div class="fc-body">
+        <div class="fc-name">${esc(f.name)}</div>
+        ${badge}${preview}
+      </div>
+      <button class="fc-remove" onclick="removeFile('${esc(f.name)}')" title="Remove">×</button>
+    </div>`;
+  }).join('');
+}
+
+function updateUploadCount() {
+  const ok = uploadedFiles.filter(f => f.success).length;
+  const total = uploadedFiles.length;
+  const el = document.getElementById('upload-count');
+  el.textContent = total ? `${ok}/${total} file(s) extracted` : 'No files loaded';
+}
+
+function buildContext() {
+  let ctx = '';
+  uploadedFiles.filter(f => f.success && f.extractedText).forEach(f => {
+    ctx += `\n\n=== DOCUMENT: ${f.name} (${f.totalPages} pages) ===\n${f.extractedText}`;
+  });
+  const paste = document.getElementById('paste-in').value.trim();
+  const extra = document.getElementById('extra-in').value.trim();
+  if (paste) ctx += `\n\n=== PASTED TEXT ===\n${paste}`;
+  if (extra) ctx += `\n\n=== INVESTIGATOR NOTES ===\n${extra}`;
+  return ctx.trim();
+}
+
+// ── API ──────────────────────────────────────────────────────────────────────
+async function callClaude(prompt) {
+  // Route through local backend proxy to avoid browser CORS restrictions
+  const r = await fetch(BACKEND + '/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: MODEL, max_tokens: 4000, system: SYS, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error?.message || 'API error ' + r.status); }
+  const d = await r.json();
+  return d.content?.find(b => b.type === 'text')?.text || '';
+}
+
+function jp(s) { try { return JSON.parse(s); } catch { return null; } }
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function sc(v) { return v >= 75 ? '#1D9E75' : v >= 50 ? '#EF9F27' : '#E24B4A'; }
+
+// ── NAV ──────────────────────────────────────────────────────────────────────
+function goPg(n) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(p => p.classList.remove('active'));
+  document.getElementById('pg-' + n).classList.add('active');
+  const ni = document.getElementById('ni' + n);
+  if (ni) ni.classList.add('active');
+}
+
+function setDone(n) {
+  const el = document.getElementById('ni' + n); if (!el) return;
+  el.classList.add('done');
+  el.querySelector('.ni-ic').textContent = '✓';
+}
+
+function swTab(e, id) {
+  document.querySelectorAll('.tp').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.target.classList.add('active');
+}
+
+function setStatus(s) { document.getElementById('tb-status').textContent = s; }
+
+function loadingEl(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<div class="loading-state"><div class="spin"></div><div class="load-msg">${msg}</div><div style="font-size:11px;color:#888780">Analyzing with Claude…</div></div>`;
+}
+
+// ── MAIN RUN ─────────────────────────────────────────────────────────────────
+async function runAll() {
+  const ctx = buildContext();
+  if (!ctx) { alert('Please upload documents or paste deviation text first.'); return; }
+
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin" style="width:12px;height:12px;border-width:2px;margin:0"></div> Analyzing…';
+
+  ['exec-out','rd-out','tl-out','ev-out','gr-out','gap-out','rca-paths','rca-narrative','rca-questions','def-out','sim-out','capa-out']
+    .forEach(id => loadingEl(id, 'Analyzing…'));
+
+  try {
+    // ── CALL 1: Scores + Timeline ──
+    setStatus('Call 1/3 · Scoring + timeline…');
+    goPg(2);
+
+    const docNames = uploadedFiles.filter(f => f.success).map(f => f.name).join(', ') || 'Pasted text';
+
+    const r1 = jp(await callClaude(`Analyze this GMP deviation package. For EVERY fact, include the document name and page number as source reference. Return ONLY valid JSON:
+{"case_id":"deviation ID or Unknown","event_summary":"2-3 sentence VP-level summary","risk_level":"High|Medium|Low","readiness_score":72,"readiness_status":"Not ready for closure|Needs additional evidence|Ready for QA review|Ready for closure","quality_score":48,"quality_rationale":"one sentence","quality_dimensions":[{"dimension":"Problem statement","score":80},{"dimension":"Evidence collection","score":65},{"dimension":"Scope evaluation","score":30},{"dimension":"Root cause logic","score":20},{"dimension":"CAPA effectiveness","score":15}],"ai_quality_commentary":"2-3 sentences on investigation quality gaps","key_findings":["finding with source ref"],"top_rca_path":"most probable root cause path","top_rca_confidence":"High|Medium|Low","do_not_close_until":["mandatory item 1 with source","mandatory item 2"],"timeline":[{"time":"datetime","event":"description","source_doc":"filename","source_page":"p.X","source_section":"Section name","type":"normal|warning|critical"}]}
+Source documents: ${docNames}
+Package:
+${ctx}`));
+
+    D.case_id = r1?.case_id || 'Unknown';
+    D.summary = r1?.event_summary || '';
+    D.risk = r1?.risk_level || 'Unknown';
+    D.readiness = r1?.readiness_score || 0;
+    D.readiness_status = r1?.readiness_status || '';
+    D.quality = r1?.quality_score || 0;
+    D.quality_rationale = r1?.quality_rationale || '';
+    D.quality_dims = r1?.quality_dimensions || [];
+    D.ai_quality_commentary = r1?.ai_quality_commentary || '';
+    D.key_findings = r1?.key_findings || [];
+    D.top_rca_path = r1?.top_rca_path || '';
+    D.top_rca_confidence = r1?.top_rca_confidence || '';
+    D.do_not_close_until = r1?.do_not_close_until || [];
+    D.timeline = r1?.timeline || [];
+
+    renderExec(); renderReadiness(); renderTimeline();
+    setDone(2); setDone(3); setDone(4);
+    updateTopbar(); updateSidebar();
+    goPg(5);
+
+    // ── CALL 2: Evidence + Graph + Gaps ──
+    setStatus('Call 2/3 · Evidence + graph + gaps…');
+
+    const r2 = jp(await callClaude(`Analyze this GMP deviation package. Include document name, page number, and section for every fact. Return ONLY valid JSON:
+{"confirmed_facts":[{"fact":"...","source_doc":"filename","source_page":"p.X","source_section":"Section","confidence":"High|Medium|Low"}],"assumptions":[{"assumption":"...","evidence":"...","source_doc":"filename","source_page":"p.X","confidence":"Low"}],"missing_evidence":[{"item":"...","why_needed":"...","severity":"High|Medium|Low","closure_blocker":true,"source_ref":"where this gap was identified"}],"conflicting_evidence":[{"description":"...","source_a":"doc+page","source_b":"doc+page"}],"key_facts_summary":"one sentence","graph_nodes":[{"id":"deviation","label":"Deviation event","type":"event"},{"id":"n2","label":"Sentry/3PL","type":"personnel"},{"id":"n3","label":"Side samples","type":"material"},{"id":"n4","label":"Bulk batch","type":"material"},{"id":"n5","label":"B41 inbound","type":"process"},{"id":"n6","label":"WMS/system","type":"equipment"}],"graph_edges":[{"from":"n2","to":"n3","label":"mislabelled"},{"from":"n3","to":"deviation","label":"caused"},{"from":"deviation","to":"n5","label":"undetected at"}]}
+Package:
+${ctx}`));
+
+    D.evidence = r2 || {};
+    D.graph_nodes = r2?.graph_nodes || [];
+    D.graph_edges = r2?.graph_edges || [];
+
+    renderEvidence(); renderGraph(); renderGaps();
+    setDone(5); setDone(6); setDone(7);
+    updateGapBadge();
+    goPg(8);
+
+    // ── CALL 3: RCA + Defensibility + Similar + CAPA ──
+    setStatus('Call 3/3 · RCA + defensibility + CAPA options…');
+
+    const r3 = jp(await callClaude(`Analyze this GMP deviation package. Cite sources throughout. Return ONLY valid JSON:
+{"problem_statement":"...","scope":"...","impact_assessment":"...","rca_discussion":"full narrative with source citations","contributing_factors":["factor — Source: doc p.X"],"rca_paths":[{"path":"hypothesis","evidence_for":["✓ point — Source: doc p.X"],"evidence_missing":["✗ gap description"],"confidence":"High|Medium|Low","confidence_pct":70,"recommended_next_step":"..."}],"open_questions":["question 1","question 2"],"investigator_narrative":"full GMP-style draft narrative for QMS","gmp_concerns":[{"concern":"...","severity":"High|Medium|Low","explanation":"...","reference":"21 CFR or ICH ref","source_doc":"doc","source_page":"p.X"}],"gmp_overall":"High|Medium|Low","similar_cases":[{"id":"DEV-XXXX","similarity_pct":84,"root_cause":"...","capa":"...","outcome":"...","months_no_recurrence":18,"source":"where found"}],"repeat_signal":{"detected":false,"common_factor":"","related_events":[],"recommendation":""},"capa_options":[{"label":"Option A","action":"...","type":"Corrective|Preventive","risk_reduction":"High|Medium|Low","effort":"High|Medium|Low","rationale":"...","priority":"High|Medium|Low"}]}
+Package:
+${ctx}`));
+
+    D.rca = r3 || {};
+    D.gmp = r3 || {};
+    D.similar = r3?.similar_cases || [];
+    D.repeat = r3?.repeat_signal || null;
+
+    renderRCA(); renderDefensibility(); renderSimilar(); renderCAPA();
+    setDone(8); setDone(9); setDone(10); setDone(11); setDone(1);
+    renderExport();
+    setStatus(`Analysis complete · ${new Date().toLocaleTimeString()}`);
+    goPg(2);
+
+  } catch(err) {
+    setStatus('Analysis failed: ' + err.message);
+    alert('Analysis error: ' + err.message);
+    goPg(1);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🧠 Re-analyze';
+}
+
+// ── SOURCE TRACE HELPER ──────────────────────────────────────────────────────
+function srcTrace(doc, page, section) {
+  if (!doc && !page && !section) return '';
+  let parts = '';
+  if (doc) parts += `<span class="src-doc">${esc(doc)}</span>`;
+  if (page) parts += `<span class="src-pg">${esc(page)}</span>`;
+  if (section) parts += `<span class="src-sec">${esc(section)}</span>`;
+  return `<div class="src-trace">${parts}</div>`;
+}
+
+// ── TOPBAR / SIDEBAR ─────────────────────────────────────────────────────────
+function updateTopbar() {
+  const el = document.getElementById('tb-chips');
+  let h = '';
+  if (D.readiness != null) { const c = D.readiness>=75?'g':D.readiness>=50?'a':'r'; h += `<div class="chip ${c}">Readiness <strong>${D.readiness}%</strong></div>`; }
+  if (D.quality != null)   { const c = D.quality>=75?'g':D.quality>=50?'a':'r'; h += `<div class="chip ${c}">Quality <strong>${D.quality}%</strong></div>`; }
+  if (D.risk) { const c = D.risk==='High'?'r':D.risk==='Medium'?'a':'g'; h += `<div class="chip ${c}">Risk <strong>${esc(D.risk)}</strong></div>`; }
+  h += `<button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="resetAll()">↺ New</button>`;
+  el.innerHTML = h;
+}
+
+function updateSidebar() {
+  document.getElementById('sb-bottom').style.display = 'flex';
+  const r = D.readiness||0, q = D.quality||0;
+  document.getElementById('sw-r').textContent = r+'%';
+  document.getElementById('sw-r').style.color = sc(r);
+  document.getElementById('sw-r-bar').style.cssText = `width:${r}%;background:${sc(r)}`;
+  document.getElementById('sw-q').textContent = q+'%';
+  document.getElementById('sw-q').style.color = sc(q);
+  document.getElementById('sw-q-bar').style.cssText = `width:${q}%;background:${sc(q)}`;
+  document.getElementById('sw-status').textContent = D.readiness_status || '';
+}
+
+function updateGapBadge() {
+  const n = (D.evidence?.missing_evidence||[]).length;
+  const b = document.getElementById('gap-bdg');
+  if (n > 0) { b.textContent = n; b.style.display = 'block'; }
+  const fn = (D.gmp?.gmp_concerns||[]).length;
+  const fb = document.getElementById('fda-bdg');
+  if (fn > 0) { fb.textContent = fn; fb.style.display = 'block'; }
+}
+
+// ── RENDER: EXEC SUMMARY ─────────────────────────────────────────────────────
+function renderExec() {
+  const r = D.readiness||0, q = D.quality||0;
+  const cs = (D.readiness_status||'').includes('Not ready')?'ct-block':(D.readiness_status||'').includes('Needs')?'ct-caution':'ct-ready';
+  const ci = cs==='ct-block'?'🚫':cs==='ct-caution'?'⚠️':'✅';
+
+  let h = `<div class="exec-card">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:11px">Investigation Intelligence Workbench — Executive Summary</div>
+    <div class="exec-id">${esc(D.case_id)}</div>
+    ${D.summary?`<div class="alert al-g" style="margin-bottom:14px">ℹ️ ${esc(D.summary)}</div>`:''}
+    <div class="score-row">
+      <div class="score-box"><div class="sb-lbl">📋 Investigation readiness</div><div class="sb-num" style="color:${sc(r)}">${r}%</div><div class="sb-sub">${esc(D.readiness_status||'')}</div><div class="sb-bar"><div class="sb-fill" style="width:${r}%;background:${sc(r)}"></div></div></div>
+      <div class="score-box"><div class="sb-lbl">⭐ Investigation quality</div><div class="sb-num" style="color:${sc(q)}">${q}%</div><div class="sb-sub">${esc(D.quality_rationale||'')}</div><div class="sb-bar"><div class="sb-fill" style="width:${q}%;background:${sc(q)}"></div></div></div>
+      <div class="score-box"><div class="sb-lbl">🛡 GMP defensibility risk</div><div class="sb-num" style="color:${D.risk==='High'?'#E24B4A':D.risk==='Medium'?'#EF9F27':'#1D9E75'}">${esc(D.risk||'—')}</div><div class="sb-sub">Based on investigation state</div></div>
+    </div>
+    <div class="closure-tag ${cs}">${ci} Closure status: ${esc(D.readiness_status||'Pending analysis')}</div>`;
+
+  // DO NOT CLOSE UNTIL (inline in exec)
+  const dncu = D.do_not_close_until || (D.evidence?.missing_evidence||[]).filter(m=>m.closure_blocker).map(m=>m.item);
+  if (dncu.length) {
+    h += `<div class="dncu"><div class="dncu-title">⛔ Do not close until</div>`;
+    dncu.forEach((b,i) => { h += `<div class="dncu-item"><div class="dncu-n">${i+1}.</div><div>${esc(b)}</div></div>`; });
+    h += '</div>';
+  }
+
+  if (D.key_findings?.length) {
+    h += `<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:8px">Key findings</div>`;
+    D.key_findings.forEach(f => { h += `<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid #F5F4F0;font-size:12px"><div style="width:6px;height:6px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:4px"></div><div>${esc(f)}</div></div>`; });
+    h += '</div>';
+  }
+  if (D.top_rca_path) {
+    h += `<div style="background:#F5F4F0;border-radius:9px;padding:11px 13px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:5px">Top RCA path</div><div style="font-size:13px;font-weight:700">${esc(D.top_rca_path)}</div><div style="font-size:11px;color:#888780;margin-top:2px">Confidence: ${esc(D.top_rca_confidence||'—')}</div></div>`;
+  }
+  h += '</div>';
+  document.getElementById('exec-out').innerHTML = h;
+}
+
+// ── RENDER: READINESS & QUALITY ──────────────────────────────────────────────
+function renderReadiness() {
+  const r = D.readiness||0, q = D.quality||0;
+  const dims = D.quality_dims||[];
+  const rdims = [
+    {n:'Evidence completeness', v: Math.min(100,Math.round(r*1.05))},
+    {n:'Scope documented', v: Math.round(r*0.92)},
+    {n:'Timeline reconstructed', v: Math.min(100,(D.timeline||[]).length*13)},
+    {n:'Closure blockers resolved', v: Math.max(0,100-((D.evidence?.missing_evidence||[]).filter(m=>m.closure_blocker).length*22))},
+  ];
+  let h = `<div class="score-2col">
+    <div class="score-card">
+      <div class="sc-lbl">📋 Investigation readiness</div>
+      <div class="sc-big" style="color:${sc(r)}">${r}%</div>
+      <div class="sc-status">${esc(D.readiness_status||'')}</div>
+      <div class="sc-bar"><div class="sc-fill" style="width:${r}%;background:${sc(r)}"></div></div>
+      ${rdims.map(d=>`<div class="dim-row"><span class="dim-lbl">${esc(d.n)}</span><div class="dim-track"><div class="dim-fill" style="width:${Math.max(0,d.v)}%;background:${sc(d.v)}"></div></div><span class="dim-val" style="color:${sc(d.v)}">${Math.max(0,d.v)}%</span></div>`).join('')}
+    </div>
+    <div class="score-card">
+      <div class="sc-lbl">⭐ Investigation quality</div>
+      <div class="sc-big" style="color:${sc(q)}">${q}%</div>
+      <div class="sc-status">${esc(D.quality_rationale||'')}</div>
+      <div class="sc-bar"><div class="sc-fill" style="width:${q}%;background:${sc(q)}"></div></div>
+      ${dims.map(d=>`<div class="dim-row"><span class="dim-lbl">${esc(d.dimension)}</span><div class="dim-track"><div class="dim-fill" style="width:${d.score||0}%;background:${sc(d.score||0)}"></div></div><span class="dim-val" style="color:${sc(d.score||0)}">${d.score||0}</span></div>`).join('')}
+      ${D.ai_quality_commentary?`<div class="ai-comment"><div class="ai-com-lbl">AI commentary</div><div class="ai-com-txt">${esc(D.ai_quality_commentary)}</div></div>`:''}
+    </div>
+  </div>`;
+  document.getElementById('rd-out').innerHTML = h;
+}
+
+// ── RENDER: TIMELINE ─────────────────────────────────────────────────────────
+function renderTimeline() {
+  const items = D.timeline||[];
+  if (!items.length) { document.getElementById('tl-out').innerHTML = '<div style="color:#888780;font-style:italic;padding:12px">No timeline events extracted.</div>'; return; }
+  let h = '';
+  if (D.summary) h += `<div class="alert al-g" style="margin-bottom:12px">ℹ️ ${esc(D.summary)}</div>`;
+  const dc = {normal:'n',warning:'w',critical:'c'};
+  items.forEach(it => {
+    h += `<div class="tl-row">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;min-width:90px;gap:4px">
+        <div class="tl-time">${esc(it.time||'Unknown')}</div>
+        <div class="tl-dot ${dc[it.type]||'n'}"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-event">${esc(it.event||'')}</div>
+        ${(it.source_doc||it.source_page||it.source_section)?`<div class="tl-src">${it.source_doc?`<span class="tl-src-badge">${esc(it.source_doc)}</span>`:''}${it.source_page?`<span style="font-size:10px;color:#888780">${esc(it.source_page)}</span>`:''}${it.source_section?`<span style="font-size:10px;color:#888780">· ${esc(it.source_section)}</span>`:''}</div>`:''}
+      </div>
+    </div>`;
+  });
+  document.getElementById('tl-out').innerHTML = h;
+}
+
+// ── RENDER: EVIDENCE MAP ─────────────────────────────────────────────────────
+function renderEvidence() {
+  const ev = D.evidence||{};
+  const cf=ev.confirmed_facts||[], ass=ev.assumptions||[], me=ev.missing_evidence||[], cx=ev.conflicting_evidence||[];
+  let h = '';
+  if (ev.key_facts_summary) h += `<div class="alert al-g">✓ ${esc(ev.key_facts_summary)}</div>`;
+
+  if (cf.length) {
+    h += `<div class="ev-section"><div class="ev-section-hdr">✓ Confirmed facts <span class="ev-count" style="background:#E1F5EE;color:#085041">${cf.length}</span></div>`;
+    cf.forEach(f => {
+      const k=(f.confidence||'M')[0].toUpperCase();
+      const cc = k==='H'?'cp-h':k==='M'?'cp-m':'cp-l';
+      h += `<div class="ev-card"><div class="ev-icon">✓</div><div class="ev-body">
+        <div class="ev-fact">${esc(f.fact||f)}</div>
+        <div class="ev-meta"><span class="conf-pill ${cc}">Confidence: ${k==='H'?'High':k==='M'?'Medium':'Low'}</span></div>
+        ${srcTrace(f.source_doc, f.source_page, f.source_section)}
+      </div></div>`;
+    });
+    h += '</div>';
+  }
+  if (ass.length) {
+    h += `<div class="ev-section"><div class="ev-section-hdr">⚠ Assumptions <span class="ev-count" style="background:#FAEEDA;color:#633806">${ass.length}</span></div>`;
+    ass.forEach(a => {
+      h += `<div class="ev-card"><div class="ev-icon">⚠</div><div class="ev-body">
+        <div class="ev-fact">${esc(a.assumption||a)}</div>
+        <div class="ev-meta"><span class="conf-pill cp-l">Low confidence</span><span style="font-size:11px;color:#888780;margin-left:4px">${esc(a.evidence||'Not yet confirmed')}</span></div>
+        ${srcTrace(a.source_doc, a.source_page, '')}
+      </div></div>`;
+    });
+    h += '</div>';
+  }
+  if (me.length) {
+    h += `<div class="ev-section"><div class="ev-section-hdr">✗ Missing evidence <span class="ev-count" style="background:#FAEEDA;color:#633806">${me.length}</span></div>`;
+    me.forEach(m => {
+      h += `<div class="ev-card"><div class="ev-icon">✗</div><div class="ev-body">
+        <div class="ev-fact">${esc(m.item||m)}${m.closure_blocker?'<span class="blocker-pill" style="margin-left:7px">Closure blocker</span>':''}</div>
+        <div style="font-size:11px;color:#888780;margin-top:4px">${esc(m.why_needed||'')}</div>
+        ${m.source_ref?`<div class="src-trace"><span class="src-doc">${esc(m.source_ref)}</span></div>`:''}
+      </div></div>`;
+    });
+    h += '</div>';
+  }
+  if (cx.length) {
+    h += `<div class="ev-section"><div class="ev-section-hdr">⚡ Conflicts <span class="ev-count" style="background:#FCEBEB;color:#791F1F">${cx.length}</span></div>`;
+    cx.forEach(c => {
+      h += `<div class="ev-card"><div class="ev-icon">⚡</div><div class="ev-body">
+        <div class="ev-fact">${esc(c.description||c)}</div>
+        <div class="src-trace"><span class="src-doc">${esc(c.source_a||'Source A')}</span> vs <span class="src-doc">${esc(c.source_b||'Source B')}</span></div>
+      </div></div>`;
+    });
+    h += '</div>';
+  }
+  if (!h) h = '<div style="color:#888780;font-style:italic">No evidence data extracted.</div>';
+  document.getElementById('ev-out').innerHTML = h;
+}
+
+// ── RENDER: GRAPH ────────────────────────────────────────────────────────────
+function renderGraph() {
+  const nodes = D.graph_nodes||[], edges = D.graph_edges||[];
+  if (!nodes.length) { document.getElementById('gr-out').innerHTML = '<div style="color:#888780;font-style:italic">No graph data.</div>'; return; }
+  const typeC={event:'#E24B4A',equipment:'#378ADD',process:'#1D9E75',material:'#EF9F27',personnel:'#7F77DD',environment:'#0F6E56',default:'#888780'};
+  const typeBg={event:'#FCEBEB',equipment:'#E6F1FB',process:'#E1F5EE',material:'#FAEEDA',personnel:'#EEEDFE',environment:'#E1F5EE',default:'#F5F4F0'};
+  const W=540,H=270,cx=W/2,cy=H/2,r=95;
+  const pos={};
+  const ctr = nodes.find(n=>n.id==='deviation')||nodes[0];
+  if (ctr) pos[ctr.id]={x:cx,y:cy};
+  nodes.filter(n=>n.id!==ctr?.id).forEach((n,i,arr)=>{
+    const a=(i/arr.length)*Math.PI*2-Math.PI/2;
+    pos[n.id]={x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)};
+  });
+  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:270px"><defs><marker id="arr" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#B4B2A9"/></marker></defs>`;
+  edges.forEach(e=>{
+    const f=pos[e.from],t=pos[e.to]; if(!f||!t)return;
+    const dx=t.x-f.x,dy=t.y-f.y,dist=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=dx/dist,ny=dy/dist;
+    const x1=f.x+nx*25,y1=f.y+ny*25,x2=t.x-nx*27,y2=t.y-ny*27;
+    svg+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#D3D1C7" stroke-width="1.5" marker-end="url(#arr)"/>`;
+    if(e.label)svg+=`<text x="${((x1+x2)/2).toFixed(1)}" y="${((y1+y2)/2-4).toFixed(1)}" font-size="8" fill="#B4B2A9" text-anchor="middle" font-family="system-ui">${esc(e.label)}</text>`;
+  });
+  nodes.forEach(n=>{
+    const p=pos[n.id]; if(!p)return;
+    const tp=n.type||'default',fc=typeC[tp]||typeC.default,bg=typeBg[tp]||typeBg.default;
+    const isC=n.id===ctr?.id,rad=isC?27:22;
+    const lbl=n.label||n.id,words=lbl.split(' ');
+    svg+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${rad}" fill="${bg}" stroke="${fc}" stroke-width="${isC?2.5:1.5}"/>`;
+    if(words.length<=2){svg+=`<text x="${p.x.toFixed(1)}" y="${(p.y+3).toFixed(1)}" font-size="${isC?9:8}" fill="${fc}" text-anchor="middle" font-family="system-ui" font-weight="700">${esc(lbl.slice(0,13))}</text>`;}
+    else{svg+=`<text x="${p.x.toFixed(1)}" y="${(p.y-1).toFixed(1)}" font-size="8" fill="${fc}" text-anchor="middle" font-family="system-ui" font-weight="700">${esc(words[0])}</text><text x="${p.x.toFixed(1)}" y="${(p.y+8).toFixed(1)}" font-size="8" fill="${fc}" text-anchor="middle" font-family="system-ui">${esc(words.slice(1).join(' ').slice(0,11))}</text>`;}
+  });
+  svg+='</svg>';
+  const types=[...new Set(nodes.map(n=>n.type||'default'))];
+  const legend=types.map(t=>`<div class="leg-item"><div class="leg-dot" style="background:${typeC[t]||typeC.default}"></div>${t}</div>`).join('');
+  document.getElementById('gr-out').innerHTML=`<div class="graph-wrap">${svg}<div class="graph-legend">${legend}</div></div>`;
+}
+
+// ── RENDER: DO NOT CLOSE UNTIL ───────────────────────────────────────────────
+function renderGaps() {
+  const me = D.evidence?.missing_evidence||[];
+  const dncu = D.do_not_close_until || me.filter(m=>m.closure_blocker).map(m=>m.item);
+  const status = D.readiness_status||'';
+  const isBlock = status.includes('Not ready'), isCaution = status.includes('Needs');
+  const banCls = isBlock?'cb-block':isCaution?'cb-caution':'cb-ready';
+  const banIcon = isBlock?'🚫':isCaution?'⚠️':'✅';
+
+  let h = `<div class="closure-banner ${banCls}"><span style="font-size:22px;flex-shrink:0">${banIcon}</span><div><div style="font-size:14px;font-weight:700">${esc(status||'Review required')}</div><div style="font-size:12px;color:#888780;margin-top:2px">${me.length} evidence gap(s) identified · ${dncu.length} closure blocker(s)</div></div></div>`;
+
+  if (dncu.length) {
+    h += `<div class="dncu"><div class="dncu-title">⛔ Investigation cannot be closed until:</div>`;
+    dncu.forEach((b,i) => { h += `<div class="dncu-item"><div class="dncu-n">${i+1}.</div><div>${esc(b)}</div></div>`; });
+    h += '</div>';
+  }
+
+  if (me.length) {
+    h += `<div style="margin-top:14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:9px">All investigation gaps</div>`;
+    me.forEach(m => {
+      const s=(m.severity||'M')[0].toUpperCase();
+      h += `<div class="gap-card"><div class="gap-sev gs-${s}">⚠</div><div><div class="gap-title">${esc(m.item||m)}${m.closure_blocker?'<span class="blocker-pill" style="margin-left:8px">Closure blocker</span>':''}</div><div class="gap-why">${esc(m.why_needed||'')}</div>${m.source_ref?`<div class="src-trace"><span class="src-doc">${esc(m.source_ref)}</span></div>`:''}</div></div>`;
+    });
+    h += '</div>';
+  }
+  document.getElementById('gap-out').innerHTML = h || '<div style="color:#888780;font-style:italic">No gaps identified.</div>';
+}
+
+// ── RENDER: RCA WORKBENCH ─────────────────────────────────────────────────────
+function renderRCA() {
+  const rca = D.rca||{};
+  // Paths
+  let pathsH = '';
+  if (rca.contributing_factors?.length) {
+    pathsH += '<div style="margin-bottom:13px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:7px">Contributing factors</div>';
+    rca.contributing_factors.forEach(f => { pathsH += `<div style="padding:7px 11px;border:1px solid #E5E3DC;border-radius:8px;margin-bottom:5px;font-size:12px;background:#fff">${esc(f)}</div>`; });
+    pathsH += '</div>';
+  }
+  (rca.rca_paths||[]).forEach((p,i) => {
+    const c=(p.confidence||'M')[0].toUpperCase();
+    const cc = c==='H'?'cc-H':c==='M'?'cc-M':'cc-L';
+    const pct = p.confidence_pct || (c==='H'?75:c==='M'?50:25);
+    pathsH += `<div class="rca-path-card">
+      <div class="rca-hdr"><div class="rca-num">${i+1}</div><div class="rca-title">${esc(p.path||'')}</div><div class="conf-circle ${cc}">${pct}%</div></div>
+      <div class="rca-ev-grid">
+        <div><div class="rca-ev-lbl lbl-for">Evidence for</div>${(Array.isArray(p.evidence_for)?p.evidence_for:[p.evidence_for||'Evidence not found.']).map(e=>`<div class="rca-ev-item">${esc(e)}</div>`).join('')}</div>
+        <div><div class="rca-ev-lbl lbl-ag">Missing / against</div>${(Array.isArray(p.evidence_missing)?p.evidence_missing:[p.evidence_missing||'—']).map(e=>`<div class="rca-ev-item miss">${esc(e)}</div>`).join('')}</div>
+      </div>
+      ${p.recommended_next_step?`<div class="rca-next">→ Next: ${esc(p.recommended_next_step)}</div>`:''}
+    </div>`;
+  });
+  document.getElementById('rca-paths').innerHTML = pathsH || '<div style="color:#888780;font-style:italic">No RCA paths generated.</div>';
+
+  // Narrative
+  let narrH = '';
+  const flds = [['Problem statement',rca.problem_statement,false],['Scope',rca.scope,false],['Impact assessment',rca.impact_assessment,false],['RCA discussion',rca.rca_discussion,false],['Full investigation narrative (draft — ready for QMS review)',rca.investigator_narrative,true]];
+  flds.forEach(([lbl,val,hi]) => { if(val) narrH += `<div class="fld"><div class="fld-lbl">${lbl}</div><div class="fld-val${hi?' hi':''}">${esc(val)}</div></div>`; });
+  document.getElementById('rca-narrative').innerHTML = narrH || '<div style="color:#888780;font-style:italic">No narrative.</div>';
+
+  // Questions
+  let qH = (rca.open_questions||[]).map((q,i) => `<div class="q-item"><div class="q-n">${i+1}</div><div>${esc(q)}</div></div>`).join('');
+  document.getElementById('rca-questions').innerHTML = qH || '<div style="color:#888780;font-style:italic">No open questions.</div>';
+}
+
+// ── RENDER: GMP DEFENSIBILITY ─────────────────────────────────────────────────
+function renderDefensibility() {
+  const concerns = D.gmp?.gmp_concerns||[];
+  const overall = D.gmp?.gmp_overall||'Unknown';
+  const oa = overall==='High'?'al-r':overall==='Medium'?'al-w':'al-g';
+  let h = `<div class="alert ${oa}">${overall==='High'?'🚨':overall==='Medium'?'⚠️':'✅'} <strong>Overall GMP defensibility risk: ${esc(overall)}</strong></div>`;
+  concerns.forEach(c => {
+    const s=(c.severity||'M')[0].toUpperCase();
+    const ss={H:{bg:'#FCEBEB',c:'#A32D2D'},M:{bg:'#FAEEDA',c:'#854F0B'},L:{bg:'#E6F1FB',c:'#0C447C'}}[s]||{};
+    h += `<div class="def-card"><div class="def-hdr"><div class="def-sev di-${s}">⚠</div><div class="def-concern">${esc(c.concern||'')}</div><span class="def-sev-tag" style="background:${ss.bg};color:${ss.c}">${esc(c.severity||'Medium')}</span></div>
+    <div class="def-body">${esc(c.explanation||'')}${c.reference?`<div class="def-ref">📖 ${esc(c.reference)}</div>`:''}${srcTrace(c.source_doc,'','')}
+    </div></div>`;
+  });
+  if (!concerns.length) h += '<div style="color:#888780;font-style:italic">No specific concerns identified.</div>';
+  document.getElementById('def-out').innerHTML = h;
+}
+
+// ── RENDER: SIMILAR CASES ─────────────────────────────────────────────────────
+function renderSimilar() {
+  const items = D.similar||[], rep = D.repeat;
+  let h = '';
+  if (rep?.detected) {
+    h += `<div class="repeat-banner"><span style="font-size:22px;flex-shrink:0">🔄</span><div><div style="font-size:14px;font-weight:700;color:#26215C">Repeat event signal detected</div><div style="font-size:12px;color:#534AB7;margin-top:3px">Common factor: ${esc(rep.common_factor||'—')}</div>${rep.related_events?.length?`<div style="font-size:12px;color:#7F77DD;margin-top:1px">Related: ${rep.related_events.map(esc).join(' · ')}</div>`:''} ${rep.recommendation?`<div style="font-size:12px;color:#3C3489;margin-top:4px">${esc(rep.recommendation)}</div>`:''}</div></div>`;
+  }
+  if (!items.length) {
+    h += '<div class="alert al-i">ℹ️ No similar historical cases found in the provided documents. In a production deployment, this queries your QMS deviation database for pattern matching across all historical events.</div>';
+  } else {
+    items.forEach(s => {
+      h += `<div class="sim-card"><div class="sim-hdr"><div class="sim-id">🕐 ${esc(s.id||'DEV-???')}</div>${s.similarity_pct?`<div class="sim-pct">${s.similarity_pct}% similar</div>`:''}</div><div class="sim-rc">${esc(s.root_cause||'—')}</div><div style="font-size:11px;color:#888780;margin:4px 0">CAPA: ${esc(s.capa||'—')}</div><div class="sim-meta"><span>✓ ${esc(s.outcome||'—')}</span>${s.months_no_recurrence?`<span>📅 No recurrence in ${s.months_no_recurrence} months</span>`:''}</div>${s.source?`<div class="src-trace"><span class="src-doc">${esc(s.source)}</span></div>`:''}</div>`;
+    });
+  }
+  document.getElementById('sim-out').innerHTML = h;
+}
+
+// ── RENDER: CAPA OPTIONS ──────────────────────────────────────────────────────
+function renderCAPA() {
+  const items = D.rca?.capa_options||[];
+  if (!items.length) { document.getElementById('capa-out').innerHTML = '<div style="color:#888780;font-style:italic">No CAPA options generated.</div>'; return; }
+  const lbls = ['A','B','C','D','E','F'];
+  let h = `<div class="capa-header-note">The following are options for QA consideration. Each option should be evaluated by a qualified investigator. These are not recommendations.</div>`;
+  items.forEach((c,i) => {
+    const t=(c.type||'C')[0], p=(c.priority||'M')[0].toUpperCase();
+    const rr=c.risk_reduction||'Medium', ef=c.effort||'Medium';
+    const rrc = rr==='High'?'#1D9E75':rr==='Medium'?'#EF9F27':'#888780';
+    const efc = ef==='High'?'#E24B4A':ef==='Medium'?'#EF9F27':'#1D9E75';
+    h += `<div class="capa-card">
+      <div class="capa-hdr">
+        <span class="capa-opt-lbl">Option ${lbls[i]||i+1}</span>
+        <span class="type-tag tt-${t}">${esc(c.type||'Action')}</span>
+        <span class="prio-tag pt-${p}">${esc(c.priority||'Medium')} priority</span>
+        <div class="capa-action">${esc(c.action||'')}</div>
+      </div>
+      <div class="capa-metrics">
+        <div class="cm"><div class="cm-lbl">Risk reduction</div><div class="cm-val" style="color:${rrc}">${esc(rr)}</div></div>
+        <div class="cm"><div class="cm-lbl">Implementation effort</div><div class="cm-val" style="color:${efc}">${esc(ef)}</div></div>
+      </div>
+      <div class="capa-rationale">${esc(c.rationale||'')}</div>
+    </div>`;
+  });
+  document.getElementById('capa-out').innerHTML = h;
+}
+
+// ── EXPORT ───────────────────────────────────────────────────────────────────
+function buildFullText() {
+  const rca=D.rca||{}, ev=D.evidence||{}, gmp=D.gmp||{};
+  let o='═══════════════════════════════════════════════════════════\n';
+  o+='  INVESTIGATION INTELLIGENCE WORKBENCH — CASE REPORT\n';
+  o+='  Decision-support only. Human QA review required.\n';
+  o+='═══════════════════════════════════════════════════════════\n';
+  o+=`Case ID:       ${D.case_id||'—'}\n`;
+  o+=`Generated:     ${new Date().toLocaleString()}\n`;
+  o+=`Status:        DRAFT — NOT FOR GMP RECORD USE WITHOUT QA APPROVAL\n`;
+  o+=`Readiness:     ${D.readiness||'—'}% | Quality: ${D.quality||'—'}% | GMP Risk: ${D.risk||'—'}\n`;
+  o+=`Closure:       ${D.readiness_status||'—'}\n`;
+  o+='───────────────────────────────────────────────────────────\n\n';
+
+  if (D.summary) o+=`1. EVENT SUMMARY\n${D.summary}\n\n`;
+
+  const dncu = D.do_not_close_until || (ev.missing_evidence||[]).filter(m=>m.closure_blocker).map(m=>m.item);
+  if (dncu.length) { o+='2. DO NOT CLOSE UNTIL\n'; dncu.forEach((b,i)=>{o+=`   ${i+1}. ${b}\n`;}); o+='\n'; }
+
+  if (D.key_findings?.length) { o+='3. KEY FINDINGS\n'; D.key_findings.forEach((f,i)=>{o+=`   ${i+1}. ${f}\n`;}); o+='\n'; }
+
+  if (D.timeline?.length) {
+    o+='4. EVENT TIMELINE\n';
+    D.timeline.forEach(t=>{o+=`   [${t.time||'Unknown'}] ${t.event}`;
+      if(t.source_doc||t.source_page) o+=` [${[t.source_doc,t.source_page,t.source_section].filter(Boolean).join(' · ')}]`;
+      o+='\n';});
+    o+='\n';
+  }
+
+  if ((ev.confirmed_facts||[]).length) {
+    o+='5. CONFIRMED FACTS\n';
+    ev.confirmed_facts.forEach(f=>{o+=`   ✓ [${f.confidence||'—'}] ${f.fact}`;
+      if(f.source_doc||f.source_page) o+=` [Source: ${[f.source_doc,f.source_page,f.source_section].filter(Boolean).join(' · ')}]`;
+      o+='\n';});
+    o+='\n';
+  }
+  if ((ev.assumptions||[]).length) {
+    o+='6. ASSUMPTIONS\n';
+    ev.assumptions.forEach(a=>{o+=`   ⚠ ${a.assumption||a} — Evidence: ${a.evidence||'Not confirmed'}\n`;});
+    o+='\n';
+  }
+  if ((ev.missing_evidence||[]).length) {
+    o+='7. MISSING EVIDENCE / GAPS\n';
+    ev.missing_evidence.forEach(m=>{o+=`   ✗ [${m.severity||'—'}]${m.closure_blocker?' [CLOSURE BLOCKER]':''} ${m.item}\n     Why needed: ${m.why_needed||'—'}\n`;});
+    o+='\n';
+  }
+  if ((ev.conflicting_evidence||[]).length) {
+    o+='8. CONFLICTING EVIDENCE\n';
+    ev.conflicting_evidence.forEach(c=>{o+=`   ⚡ ${c.description} [${c.source_a||'—'} vs ${c.source_b||'—'}]\n`;});
+    o+='\n';
+  }
+
+  if (rca.problem_statement) o+=`9. PROBLEM STATEMENT\n${rca.problem_statement}\n\n`;
+  if (rca.scope) o+=`10. SCOPE\n${rca.scope}\n\n`;
+  if (rca.impact_assessment) o+=`11. IMPACT ASSESSMENT\n${rca.impact_assessment}\n\n`;
+  if (rca.rca_discussion) o+=`12. ROOT CAUSE DISCUSSION\n${rca.rca_discussion}\n\n`;
+
+  if (rca.rca_paths?.length) {
+    o+='13. CANDIDATE RCA PATHS\n';
+    rca.rca_paths.forEach((p,i)=>{
+      o+=`    ${i+1}. ${p.path} [Confidence: ${p.confidence_pct||'—'}%]\n`;
+      (Array.isArray(p.evidence_for)?p.evidence_for:[p.evidence_for||'']).forEach(e=>{if(e)o+=`       ${e}\n`;});
+      (Array.isArray(p.evidence_missing)?p.evidence_missing:[p.evidence_missing||'']).forEach(e=>{if(e)o+=`       Missing: ${e}\n`;});
+      if(p.recommended_next_step)o+=`       → Next: ${p.recommended_next_step}\n`;
+      o+='\n';
+    });
+  }
+
+  if (gmp.gmp_concerns?.length) {
+    o+=`14. GMP DEFENSIBILITY REVIEW\n    Overall risk: ${gmp.gmp_overall||'—'}\n`;
+    gmp.gmp_concerns.forEach((c,i)=>{o+=`    ${i+1}. [${c.severity}] ${c.concern}\n       ${c.explanation||''}\n       Ref: ${c.reference||'—'}\n`;});
+    o+='\n';
+  }
+
+  if (rca.capa_options?.length) {
+    o+='15. CAPA OPTIONS (QA decision required — not recommendations)\n';
+    rca.capa_options.forEach((c,i)=>{o+=`    Option ${['A','B','C','D','E'][i]||i+1}: [${c.type}][${c.priority}] ${c.action}\n    Risk reduction: ${c.risk_reduction} | Effort: ${c.effort}\n    Rationale: ${c.rationale}\n\n`;});
+  }
+
+  if (rca.open_questions?.length) {
+    o+='16. OPEN QUESTIONS BEFORE CLOSURE\n';
+    rca.open_questions.forEach((q,i)=>{o+=`    ${i+1}. ${q}\n`;});
+    o+='\n';
+  }
+
+  if (rca.investigator_narrative) o+=`17. FULL INVESTIGATION NARRATIVE (DRAFT)\n${rca.investigator_narrative}\n\n`;
+
+  o+='═══════════════════════════════════════════════════════════\n';
+  o+='DECISION-SUPPORT ONLY — AI-GENERATED DRAFT\n';
+  o+='Human QA review and approval required before entry into any GMP record system.\n';
+  o+='This document does not constitute a qualified investigation report.\n';
+  o+='═══════════════════════════════════════════════════════════\n';
+  return o;
+}
+
+function renderExport() { document.getElementById('export-preview').textContent = buildFullText(); setDone(12); }
+
+function dl(content, filename, type) {
+  const b = new Blob([content],{type});
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a'); a.href=u; a.download=filename; a.click();
+  URL.revokeObjectURL(u);
+}
+
+function exportWord() { if(!D.summary&&!D.rca){alert('Run analysis first.');return;} dl(buildFullText(), `investigation_${D.case_id||Date.now()}.txt`,'text/plain'); }
+
+function exportJSON() {
+  if(!D.summary&&!D.rca){alert('Run analysis first.');return;}
+  const pkg={
+    meta:{generated:new Date().toISOString(),case_id:D.case_id,status:'DRAFT',disclaimer:'Decision-support only. Human QA review required.',readiness:D.readiness,quality:D.quality,risk:D.risk,closure_status:D.readiness_status},
+    do_not_close_until:D.do_not_close_until||[],
+    event_summary:D.summary, key_findings:D.key_findings, timeline:D.timeline,
+    evidence:D.evidence, rca:D.rca,
+    gmp_defensibility:{overall:D.gmp?.gmp_overall,concerns:D.gmp?.gmp_concerns},
+    similar_cases:D.similar, repeat_signal:D.repeat
+  };
+  dl(JSON.stringify(pkg,null,2),`investigation_${D.case_id||Date.now()}.json`,'application/json');
+}
+
+function exportCSV() {
+  if(!D.evidence){alert('Run analysis first.');return;}
+  let csv='Type,Finding / Item,Detail,Severity / Confidence,Closure Blocker,Source Doc,Source Page,Source Section\n';
+  (D.evidence.confirmed_facts||[]).forEach(f=>{csv+=`Confirmed fact,"${(f.fact||'').replace(/"/g,'""')}","","${f.confidence||''}","","${f.source_doc||''}","${f.source_page||''}","${f.source_section||''}"\n`;});
+  (D.evidence.assumptions||[]).forEach(a=>{csv+=`Assumption,"${(a.assumption||'').replace(/"/g,'""')}","${(a.evidence||'').replace(/"/g,'""')}","Low","","${a.source_doc||''}","${a.source_page||''}",""\n`;});
+  (D.evidence.missing_evidence||[]).forEach(m=>{csv+=`Missing evidence,"${(m.item||'').replace(/"/g,'""')}","${(m.why_needed||'').replace(/"/g,'""')}","${m.severity||''}","${m.closure_blocker?'YES':''}","${m.source_ref||''}","",""\n`;});
+  (D.rca?.rca_paths||[]).forEach(p=>{csv+=`RCA path,"${(p.path||'').replace(/"/g,'""')}","${(Array.isArray(p.evidence_for)?p.evidence_for.join('; '):p.evidence_for||'').replace(/"/g,'""')}","${p.confidence||''}","","","",""\n`;});
+  (D.gmp?.gmp_concerns||[]).forEach(c=>{csv+=`GMP concern,"${(c.concern||'').replace(/"/g,'""')}","${(c.explanation||'').replace(/"/g,'""')}","${c.severity||''}","","${c.source_doc||''}","${c.source_page||''}",""\n`;});
+  (D.rca?.capa_options||[]).forEach(c=>{csv+=`CAPA option,"${(c.action||'').replace(/"/g,'""')}","${(c.rationale||'').replace(/"/g,'""')}","${c.priority||''}","","","",""\n`;});
+  dl(csv,`investigation_evidence_${D.case_id||Date.now()}.csv`,'text/csv');
+}
+
+function copyAll() {
+  if(!D.summary&&!D.rca){alert('Run analysis first.');return;}
+  navigator.clipboard.writeText(buildFullText()).then(()=>alert('Copied to clipboard.')).catch(()=>{});
+}
+
+function resetAll() {
+  if(D.summary&&!confirm('Clear this case and start fresh?'))return;
+  D={}; uploadedFiles=[];
+  renderFileCards(); updateUploadCount();
+  document.getElementById('paste-in').value='';
+  document.getElementById('extra-in').value='';
+  setStatus('No case loaded · upload PDF or paste text');
+  document.getElementById('tb-chips').innerHTML='<button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="resetAll()">↺ New case</button>';
+  document.getElementById('sb-bottom').style.display='none';
+  document.getElementById('gap-bdg').style.display='none';
+  document.getElementById('fda-bdg').style.display='none';
+  const iconMap={1:'⬆',2:'📋',3:'📊',4:'⏱',5:'🗺',6:'🕸',7:'⛔',8:'🧠',9:'🛡',10:'🕐',11:'✅',12:'⬇'};
+  for(let n=1;n<=12;n++){const el=document.getElementById('ni'+n);if(el){el.classList.remove('done');el.querySelector('.ni-ic').textContent=iconMap[n]||'○';}}
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('run-btn').innerHTML='🧠 Run investigation analysis';
+  ['exec-out','rd-out','tl-out','ev-out','gr-out','gap-out','rca-paths','rca-narrative','rca-questions','def-out','sim-out','capa-out'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML='<div class="loading-state"><div class="spin"></div><div class="load-msg">Run analysis first</div></div>';
+  });
+  document.getElementById('export-preview').textContent='Run analysis first.';
+  goPg(1);
+}
+</script>
+</body>
+</html>
