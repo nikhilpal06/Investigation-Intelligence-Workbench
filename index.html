@@ -5,253 +5,332 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Investigation Intelligence Workbench</title>
 <style>
+/* ═══════════════════════════════════════════════════════════════════
+   INVESTIGATION INTELLIGENCE WORKBENCH — Brand design system
+   Nikhil Pal brand kit: Navy #1B2D5A · Teal #17A2B8 · Orange #FF6B35
+   Montserrat. Orange reserved for ACTION only (run, blockers, alerts).
+   Aesthetic: precision laboratory instrument — calm, exact, confident.
+   ═══════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --navy:#1B2D5A; --navy-700:#16244A; --navy-900:#0F1A36;
+  --teal:#17A2B8; --teal-600:#1391A5; --teal-50:#E7F6F8; --teal-100:#CDEDF1;
+  --orange:#FF6B35; --orange-600:#F0561E; --orange-50:#FFF1EB;
+  --ink:#1F2733; --ink-600:#475063; --ink-400:#8A94A6;
+  --paper:#FBFCFD; --surface:#FFFFFF; --line:#E6EAF0; --line-strong:#D2D9E4;
+  --ok:#15856B; --ok-bg:#E6F5F0; --ok-line:#A9DFD0;
+  --warn:#B26A00; --warn-bg:#FFF3DF; --warn-line:#F4D199;
+  --risk:#C8362F; --risk-bg:#FDECEA; --risk-line:#F3B6B1;
+  --shadow:0 1px 2px rgba(27,45,90,.04),0 4px 16px rgba(27,45,90,.05);
+  --shadow-lift:0 4px 12px rgba(27,45,90,.08),0 12px 32px rgba(27,45,90,.08);
+  --r:10px; --r-lg:14px; --r-sm:7px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F4F0;color:#1A1917;font-size:13px;min-height:100vh;display:flex;flex-direction:column}
-/* DISCLAIMER BAR */
-.disclaimer{background:#FEF3C7;border-bottom:1px solid #F59E0B;padding:7px 20px;font-size:11px;color:#78350F;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.disclaimer strong{font-weight:700}
+body{font-family:'Montserrat',Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--paper);color:var(--ink);font-size:13px;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--teal-100);color:var(--navy)}
+
+/* DISCLAIMER BAR — quiet, authoritative */
+.disclaimer{background:var(--navy);border-bottom:2px solid var(--orange);padding:7px 22px;font-size:11px;color:#C9D3E8;display:flex;align-items:center;gap:8px;flex-shrink:0;letter-spacing:.01em;font-weight:400}
+.disclaimer strong{font-weight:700;color:#fff}
+
 /* TOPBAR */
-.tb{background:#fff;border-bottom:1px solid #E5E3DC;padding:0 18px;height:48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:32px;z-index:99}
-.tb-left{display:flex;align-items:center;gap:10px}
-.logo{width:30px;height:30px;background:#1D9E75;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
-.app-name{font-size:13px;font-weight:700}
-.app-sub{font-size:10px;color:#888780;margin-top:1px}
-.tb-chips{display:flex;gap:5px;align-items:center}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:16px;font-size:11px;font-weight:700;border:1px solid #E5E3DC;background:#F5F4F0;color:#888780}
-.chip.g{background:#E1F5EE;border-color:#9FE1CB;color:#085041}
-.chip.a{background:#FAEEDA;border-color:#FAC775;color:#633806}
-.chip.r{background:#FCEBEB;border-color:#F09595;color:#791F1F}
+.tb{background:var(--surface);border-bottom:1px solid var(--line);padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:33px;z-index:99}
+.tb-left{display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;background:var(--navy);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;flex-shrink:0;font-weight:800;letter-spacing:.02em;position:relative;overflow:hidden}
+.logo::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:3px;background:var(--orange)}
+.app-name{font-size:14px;font-weight:700;letter-spacing:-.01em;color:var(--navy)}
+.app-sub{font-size:10px;color:var(--ink-400);margin-top:1px;font-weight:500;letter-spacing:.02em}
+.tb-chips{display:flex;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-600);letter-spacing:.01em}
+.chip.g{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok)}
+.chip.a{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn)}
+.chip.r{background:var(--risk-bg);border-color:var(--risk-line);color:var(--risk)}
+
 /* BODY */
 .body{display:flex;flex:1}
-/* SIDEBAR */
-.sb{width:188px;background:#fff;border-right:1px solid #E5E3DC;padding:9px 7px;flex-shrink:0;position:sticky;top:80px;height:calc(100vh - 80px);overflow-y:auto;display:flex;flex-direction:column}
-.ni{display:flex;align-items:center;gap:7px;padding:6px 7px;border-radius:7px;cursor:pointer;border:none;background:none;text-align:left;width:100%;transition:background 0.1s;position:relative;font-family:inherit}
-.ni:hover{background:#F5F4F0}
-.ni.active{background:#F5F4F0}
-.ni-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:#F5F4F0;color:#888780}
-.ni.active .ni-ic,.ni.done .ni-ic{background:#E1F5EE;color:#1D9E75}
-.ni-lbl{font-size:11px;color:#888780;line-height:1.25;flex:1}
-.ni.active .ni-lbl{color:#1A1917;font-weight:700}
-.ni-bdg{font-size:9px;padding:1px 4px;border-radius:7px;font-weight:700}
-.ni-bdg.w{background:#FAEEDA;color:#854F0B}
-.ni-bdg.r{background:#FCEBEB;color:#A32D2D}
-.sep{height:1px;background:#E5E3DC;margin:4px 0}
-.sb-bottom{margin-top:auto;padding-top:8px}
-.sb-widget{border:1px solid #E5E3DC;border-radius:8px;padding:10px;background:#F5F4F0}
-.sw-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:3px}
-.sw-num{font-size:20px;font-weight:700;line-height:1;margin-bottom:4px}
-.sw-bar{height:3px;background:#E5E3DC;border-radius:2px;overflow:hidden;margin-bottom:6px}
-.sw-fill{height:100%;border-radius:2px;transition:width 1.2s}
+
+/* SIDEBAR — reads like an investigation case file */
+.sb{width:212px;background:var(--surface);border-right:1px solid var(--line);padding:14px 11px;flex-shrink:0;position:sticky;top:89px;height:calc(100vh - 89px);overflow-y:auto;display:flex;flex-direction:column}
+.sb::before{content:'CASE FILE';font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--ink-400);padding:0 7px 10px;display:block}
+.ni{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:var(--r-sm);cursor:pointer;border:none;background:none;text-align:left;width:100%;transition:background .12s;position:relative;font-family:inherit;margin-bottom:1px}
+.ni::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0;background:var(--orange);border-radius:0 2px 2px 0;transition:height .15s}
+.ni:hover{background:var(--paper)}
+.ni.active{background:var(--teal-50)}
+.ni.active::before{height:20px}
+.ni-ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:var(--paper);color:var(--ink-400);font-weight:700;border:1px solid var(--line);transition:all .15s}
+.ni.active .ni-ic{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ni.done .ni-ic{background:var(--teal);color:#fff;border-color:var(--teal)}
+.ni-lbl{font-size:11px;color:var(--ink-600);line-height:1.25;flex:1;font-weight:500}
+.ni.active .ni-lbl{color:var(--navy);font-weight:700}
+.ni.done .ni-lbl{color:var(--ink)}
+.ni-bdg{font-size:9px;padding:1px 5px;border-radius:7px;font-weight:700}
+.ni-bdg.w{background:var(--warn-bg);color:var(--warn)}
+.ni-bdg.r{background:var(--risk-bg);color:var(--risk)}
+.sep{height:1px;background:var(--line);margin:8px 4px}
+.sb-bottom{margin-top:auto;padding-top:10px}
+.sb-widget{border:1px solid var(--line);border-radius:var(--r);padding:13px;background:var(--navy);position:relative;overflow:hidden}
+.sb-widget::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--orange)}
+.sw-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#9DB0D4;margin-bottom:4px}
+.sw-num{font-size:24px;font-weight:700;line-height:1;margin-bottom:5px;color:#fff;font-family:'JetBrains Mono',monospace}
+.sw-bar{height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;margin-bottom:9px}
+.sw-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+
 /* MAIN */
-.main{flex:1;padding:20px 22px;overflow-y:auto}
-.pg{display:none}
+.main{flex:1;padding:26px 30px;overflow-y:auto;max-width:1100px}
+.pg{display:none;animation:fadeUp .35s cubic-bezier(.16,1,.3,1)}
 .pg.active{display:block}
-.pg-title{font-size:17px;font-weight:700;margin-bottom:3px}
-.pg-sub{font-size:12px;color:#888780;margin-bottom:14px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pg-title{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.02em;color:var(--navy)}
+.pg-sub{font-size:12px;color:var(--ink-400);margin-bottom:22px;font-weight:500;line-height:1.5;max-width:680px}
+
 /* UPLOAD */
-.drop-zone{border:2px dashed #D3D1C7;border-radius:12px;padding:22px;text-align:center;cursor:pointer;background:#fff;transition:all .15s;position:relative;margin-bottom:10px}
-.drop-zone:hover,.drop-zone.over{border-color:#1D9E75;background:#E1F5EE}
+.drop-zone{border:1.5px dashed var(--line-strong);border-radius:var(--r-lg);padding:34px 22px;text-align:center;cursor:pointer;background:var(--surface);transition:all .18s;position:relative;margin-bottom:14px}
+.drop-zone:hover,.drop-zone.over{border-color:var(--teal);background:var(--teal-50)}
 .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.dz-icon{font-size:28px;margin-bottom:8px}
-.dz-title{font-size:14px;font-weight:700;margin-bottom:3px}
-.dz-sub{font-size:11px;color:#888780}
+.dz-icon{font-size:30px;margin-bottom:10px;opacity:.85}
+.dz-title{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--navy)}
+.dz-sub{font-size:11px;color:var(--ink-400);font-weight:500;line-height:1.5}
+
 /* FILE STATUS CARDS */
-.file-cards{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
-.file-card{background:#fff;border:1px solid #E5E3DC;border-radius:9px;padding:10px 13px;display:flex;gap:10px;align-items:flex-start}
-.fc-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.file-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.file-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 15px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow);transition:border-color .15s}
+.file-card:hover{border-color:var(--line-strong)}
+.fc-icon{font-size:19px;flex-shrink:0;margin-top:1px}
 .fc-body{flex:1;min-width:0}
-.fc-name{font-size:12px;font-weight:700;color:#1A1917;margin-bottom:3px;word-break:break-word}
-.fc-meta{font-size:11px;color:#888780}
-.fc-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;margin-top:4px}
-.fcb-ok{background:#E1F5EE;color:#085041}
-.fcb-warn{background:#FAEEDA;color:#633806}
-.fcb-err{background:#FCEBEB;color:#791F1F}
-.fc-remove{cursor:pointer;color:#888780;font-size:18px;line-height:1;flex-shrink:0;background:none;border:none;padding:0}
-.fc-remove:hover{color:#E24B4A}
+.fc-name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px;word-break:break-word}
+.fc-meta{font-size:11px;color:var(--ink-400)}
+.fc-badge{display:inline-block;font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;margin-top:4px;letter-spacing:.02em}
+.fcb-ok{background:var(--ok-bg);color:var(--ok)}
+.fcb-warn{background:var(--warn-bg);color:var(--warn)}
+.fcb-err{background:var(--risk-bg);color:var(--risk)}
+.fc-remove{cursor:pointer;color:var(--ink-400);font-size:19px;line-height:1;flex-shrink:0;background:none;border:none;padding:0;transition:color .12s}
+.fc-remove:hover{color:var(--risk)}
+
 /* PREVIEW BOX */
-.preview-wrap{border:1px solid #9FE1CB;border-radius:9px;background:#F8FDFB;margin-bottom:12px;overflow:hidden}
-.preview-hdr{padding:8px 12px;background:#E1F5EE;border-bottom:1px solid #9FE1CB;display:flex;align-items:center;justify-content:space-between}
-.preview-hdr-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#085041}
-.preview-hdr-meta{font-size:10px;color:#0F6E56}
-.preview-body{padding:10px 13px;max-height:140px;overflow-y:auto;font-size:11px;font-family:monospace;line-height:1.6;color:#1A1917;white-space:pre-wrap;word-break:break-word}
+.preview-wrap{border:1px solid var(--teal-100);border-radius:var(--r);background:var(--teal-50);margin-bottom:12px;overflow:hidden}
+.preview-hdr{padding:9px 13px;background:var(--teal-100);border-bottom:1px solid var(--teal-100);display:flex;align-items:center;justify-content:space-between}
+.preview-hdr-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-600)}
+.preview-hdr-meta{font-size:10px;color:var(--teal-600);font-weight:500}
+.preview-body{padding:11px 14px;max-height:140px;overflow-y:auto;font-size:11px;font-family:'JetBrains Mono',monospace;line-height:1.6;color:var(--ink-600);white-space:pre-wrap;word-break:break-word}
+
 /* FORMS */
-textarea{width:100%;border:1px solid #E5E3DC;border-radius:8px;padding:9px 11px;font-size:12px;font-family:inherit;color:#1A1917;background:#fff;resize:vertical;outline:none;line-height:1.65}
-textarea:focus{border-color:#1D9E75}
-.fl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;display:block;margin-bottom:5px}
-/* BUTTONS */
-.btn{padding:8px 15px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E3DC}
-.btn-p{background:#1D9E75;border-color:#0F6E56;color:#fff}
-.btn-p:hover{background:#0F6E56}
-.btn-p:disabled{background:#9FE1CB;border-color:#9FE1CB;cursor:not-allowed;opacity:.7}
-.btn-s{background:#fff;color:#1A1917}
-.btn-s:hover{background:#F5F4F0}
+textarea,input[type=text],select{width:100%;border:1px solid var(--line-strong);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;font-family:inherit;color:var(--ink);background:var(--surface);resize:vertical;outline:none;line-height:1.65;transition:border-color .15s,box-shadow .15s}
+textarea:focus,input[type=text]:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-50)}
+.fl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-600);display:block;margin-bottom:6px}
+
+/* BUTTONS — orange is ACTION */
+.btn{padding:9px 17px;border-radius:var(--r-sm);font-size:12px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);letter-spacing:.01em}
+.btn-p{background:var(--orange);border-color:var(--orange-600);color:#fff;box-shadow:0 1px 2px rgba(255,107,53,.3)}
+.btn-p:hover{background:var(--orange-600);box-shadow:0 2px 8px rgba(255,107,53,.32)}
+.btn-p:disabled{background:#F6B79E;border-color:#F6B79E;cursor:not-allowed;box-shadow:none}
+.btn-s{background:var(--surface);color:var(--navy)}
+.btn-s:hover{background:var(--paper);border-color:var(--ink-400)}
+
 /* ALERTS */
-.alert{border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:10px;display:flex;gap:8px;line-height:1.6;align-items:flex-start}
-.al-i{background:#E6F1FB;color:#0C447C;border:1px solid #B5D4F4}
-.al-w{background:#FAEEDA;color:#633806;border:1px solid #FAC775}
-.al-g{background:#E1F5EE;color:#085041;border:1px solid #9FE1CB}
-.al-r{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+.alert{border-radius:var(--r-sm);padding:10px 13px;font-size:12px;margin-bottom:12px;display:flex;gap:9px;line-height:1.6;align-items:flex-start;font-weight:500}
+.al-i{background:var(--teal-50);color:var(--teal-600);border:1px solid var(--teal-100)}
+.al-w{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line)}
+.al-g{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+.al-r{background:var(--risk-bg);color:var(--risk);border:1px solid var(--risk-line)}
+
 /* EXEC SUMMARY */
-.exec-card{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:18px 20px;margin-bottom:13px}
-.exec-id{font-size:21px;font-weight:700;margin-bottom:12px}
-.score-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
-.score-box{border:1px solid #E5E3DC;border-radius:10px;padding:12px 14px}
-.sb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:4px}
-.sb-num{font-size:32px;font-weight:700;line-height:1;margin-bottom:3px}
-.sb-sub{font-size:10px;color:#888780;margin-bottom:7px}
-.sb-bar{height:3px;background:#E5E3DC;border-radius:2px;overflow:hidden}
-.sb-fill{height:100%;border-radius:2px;transition:width 1.2s}
-.closure-tag{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:9px;font-size:13px;font-weight:700;margin-bottom:14px}
-.ct-block{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
-.ct-caution{background:#FAEEDA;color:#633806;border:1px solid #FAC775}
-.ct-ready{background:#E1F5EE;color:#085041;border:1px solid #9FE1CB}
-/* DO NOT CLOSE UNTIL */
-.dncu{background:#FCEBEB;border:1px solid #F09595;border-radius:12px;padding:14px 16px;margin-bottom:14px}
-.dncu-title{font-size:13px;font-weight:700;color:#791F1F;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.dncu-item{display:flex;gap:8px;font-size:12px;color:#791F1F;padding:5px 0;border-bottom:1px solid rgba(240,149,149,.3)}
+.exec-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px;margin-bottom:14px;box-shadow:var(--shadow)}
+.exec-id{font-size:24px;font-weight:800;margin-bottom:16px;letter-spacing:-.02em;color:var(--navy);font-family:'JetBrains Mono',monospace}
+/* score readouts — instrument panel */
+.score-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px}
+.score-box{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;background:var(--paper);position:relative;overflow:hidden}
+.score-box::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--line-strong)}
+.sb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-400);margin-bottom:8px}
+.sb-num{font-size:38px;font-weight:700;line-height:.95;margin-bottom:5px;font-family:'JetBrains Mono',monospace;letter-spacing:-.02em}
+.sb-sub{font-size:10px;color:var(--ink-600);margin-bottom:10px;font-weight:500;line-height:1.4;min-height:26px}
+.sb-bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.sb-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.closure-tag{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:var(--r);font-size:13px;font-weight:700;margin-bottom:16px;letter-spacing:.01em}
+.ct-block{background:var(--risk-bg);color:var(--risk);border:1px solid var(--risk-line)}
+.ct-caution{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-line)}
+.ct-ready{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+
+/* DO NOT CLOSE UNTIL — the orange signature moment */
+.dncu{background:var(--orange-50);border:1px solid #FAC4AC;border-left:4px solid var(--orange);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.dncu-title{font-size:13px;font-weight:800;color:var(--orange-600);margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:.02em;text-transform:uppercase}
+.dncu-item{display:flex;gap:10px;font-size:12px;color:var(--ink);padding:7px 0;border-bottom:1px solid #FAD9C9;font-weight:500;line-height:1.5}
 .dncu-item:last-child{border-bottom:none}
-.dncu-n{font-size:11px;font-weight:700;min-width:18px;margin-top:1px}
+.dncu-n{font-size:11px;font-weight:800;min-width:18px;margin-top:1px;color:var(--orange)}
+
 /* SCORE BREAKDOWN PAGE */
-.score-2col{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}
-.score-card{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:16px 18px}
-.sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:5px}
-.sc-big{font-size:40px;font-weight:700;line-height:1;margin-bottom:4px}
-.sc-status{font-size:11px;color:#888780;margin-bottom:10px}
-.sc-bar{height:5px;background:#E5E3DC;border-radius:3px;overflow:hidden;margin-bottom:12px}
-.sc-fill{height:100%;border-radius:3px;transition:width 1.2s}
-.dim-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px}
-.dim-lbl{color:#888780;min-width:140px}
-.dim-track{flex:1;height:4px;background:#E5E3DC;border-radius:2px;overflow:hidden}
-.dim-fill{height:100%;border-radius:2px}
-.dim-val{min-width:30px;text-align:right;font-weight:700;font-size:10px}
-.ai-comment{background:#F5F4F0;border:1px solid #E5E3DC;border-radius:8px;padding:10px 13px;margin-top:10px}
-.ai-com-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:5px}
-.ai-com-txt{font-size:12px;color:#1A1917;line-height:1.7}
+.score-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.score-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--shadow)}
+.sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-400);margin-bottom:8px}
+.sc-big{font-size:46px;font-weight:700;line-height:1;margin-bottom:5px;font-family:'JetBrains Mono',monospace;letter-spacing:-.02em}
+.sc-status{font-size:11px;color:var(--ink-600);margin-bottom:14px;font-weight:500}
+.sc-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.sc-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.dim-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:11px}
+.dim-lbl{color:var(--ink-600);min-width:150px;font-weight:500}
+.dim-track{flex:1;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.dim-fill{height:100%;border-radius:3px;transition:width .9s cubic-bezier(.16,1,.3,1)}
+.dim-val{min-width:32px;text-align:right;font-weight:700;font-size:11px;font-family:'JetBrains Mono',monospace}
+.ai-comment{background:var(--navy);border-radius:var(--r);padding:14px 16px;margin-top:14px}
+.ai-com-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#9DB0D4;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.ai-com-txt{font-size:12px;color:#E8EDF6;line-height:1.7;font-weight:400}
+
 /* TIMELINE */
-.tl-row{display:flex;gap:11px;padding:8px 0;border-bottom:1px solid #F5F4F0}
-.tl-time{font-size:11px;font-weight:700;font-family:monospace;min-width:90px;color:#1A1917;margin-top:1px}
-.tl-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.tl-dot.n{background:#1D9E75}.tl-dot.w{background:#EF9F27}.tl-dot.c{background:#E24B4A}
+.tl-row{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);position:relative}
+.tl-time{font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;min-width:96px;color:var(--ink-600);margin-top:1px}
+.tl-dot{width:9px;height:9px;border-radius:50%;margin-top:4px;flex-shrink:0;box-shadow:0 0 0 3px var(--surface),0 0 0 4px var(--line)}
+.tl-dot.n{background:var(--teal)}.tl-dot.w{background:var(--orange)}.tl-dot.c{background:var(--risk)}
 .tl-body{flex:1}
-.tl-event{font-size:12px;color:#1A1917;line-height:1.5}
-.tl-src{font-size:10px;color:#378ADD;margin-top:2px;display:flex;align-items:center;gap:4px}
-.tl-src-badge{font-size:9px;padding:1px 6px;border-radius:6px;background:#E6F1FB;color:#0C447C;font-weight:700}
+.tl-event{font-size:12px;color:var(--ink);line-height:1.55;font-weight:500}
+.tl-src{font-size:10px;color:var(--teal-600);margin-top:4px;display:flex;align-items:center;gap:5px}
+.tl-src-badge{font-size:9px;padding:2px 7px;border-radius:6px;background:var(--teal-50);color:var(--teal-600);font-weight:700}
+
 /* EVIDENCE MAP */
-.ev-section{margin-bottom:18px}
-.ev-section-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:9px;display:flex;align-items:center;gap:7px}
-.ev-count{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:700}
-.ev-card{background:#fff;border:1px solid #E5E3DC;border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;gap:11px}
-.ev-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.ev-section{margin-bottom:22px}
+.ev-section-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-600);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.ev-count{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.ev-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;display:flex;gap:12px;box-shadow:var(--shadow)}
+.ev-icon{font-size:16px;flex-shrink:0;margin-top:1px}
 .ev-body{flex:1}
-.ev-fact{font-size:12px;font-weight:700;color:#1A1917;margin-bottom:5px;line-height:1.4}
-.ev-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.ev-src-group{display:flex;align-items:center;gap:4px;font-size:10px;color:#888780}
-.src-tag{font-size:9px;padding:2px 6px;border-radius:6px;background:#E6F1FB;color:#0C447C;font-weight:700}
-.conf-pill{font-size:9px;padding:2px 6px;border-radius:7px;font-weight:700}
-.cp-h{background:#E1F5EE;color:#085041}
-.cp-m{background:#FAEEDA;color:#633806}
-.cp-l{background:#FCEBEB;color:#791F1F}
-.blocker-pill{font-size:9px;padding:2px 6px;border-radius:7px;background:#FCEBEB;color:#A32D2D;font-weight:700}
+.ev-fact{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.5}
+.ev-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ev-src-group{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ink-400)}
+.src-tag{font-size:9px;padding:2px 7px;border-radius:6px;background:var(--teal-50);color:var(--teal-600);font-weight:700}
+.conf-pill{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;letter-spacing:.02em}
+.cp-h{background:var(--ok-bg);color:var(--ok)}
+.cp-m{background:var(--warn-bg);color:var(--warn)}
+.cp-l{background:var(--risk-bg);color:var(--risk)}
+.blocker-pill{font-size:9px;padding:2px 7px;border-radius:7px;background:var(--orange-50);color:var(--orange-600);font-weight:700;border:1px solid #FAC4AC}
+
 /* GRAPH */
-.graph-wrap{background:#fff;border:1px solid #E5E3DC;border-radius:13px;padding:16px;margin-bottom:12px}
-.graph-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px;padding-top:9px;border-top:1px solid #F5F4F0}
-.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#888780}
-.leg-dot{width:7px;height:7px;border-radius:50%}
+.graph-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.graph-legend{display:flex;flex-wrap:wrap;gap:11px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ink-600);font-weight:500}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
 /* GAPS */
-.closure-banner{border-radius:11px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;gap:13px}
-.gap-card{background:#fff;border:1px solid #E5E3DC;border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;gap:11px}
-.gap-sev{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.gs-H{background:#FCEBEB;color:#A32D2D}
-.gs-M{background:#FAEEDA;color:#854F0B}
-.gs-L{background:#E1F5EE;color:#0F6E56}
-.gap-title{font-size:12px;font-weight:700;margin-bottom:3px}
-.gap-why{font-size:11px;color:#888780;line-height:1.5}
+.closure-banner{border-radius:var(--r);padding:15px 17px;margin-bottom:16px;display:flex;align-items:center;gap:14px;font-weight:500}
+.gap-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;display:flex;gap:12px;box-shadow:var(--shadow)}
+.gap-sev{width:30px;height:30px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.gs-H{background:var(--risk-bg);color:var(--risk)}
+.gs-M{background:var(--warn-bg);color:var(--warn)}
+.gs-L{background:var(--ok-bg);color:var(--ok)}
+.gap-title{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--ink)}
+.gap-why{font-size:11px;color:var(--ink-600);line-height:1.55}
+
 /* RCA */
-.rca-path-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:13px 15px;margin-bottom:9px}
-.rca-hdr{display:flex;align-items:center;gap:9px;margin-bottom:10px}
-.rca-num{width:22px;height:22px;border-radius:50%;background:#F5F4F0;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#888780;flex-shrink:0}
-.rca-title{font-size:13px;font-weight:700;flex:1;line-height:1.3}
-.conf-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.cc-H{background:#E1F5EE;color:#085041;border:2px solid #1D9E75}
-.cc-M{background:#FAEEDA;color:#633806;border:2px solid #EF9F27}
-.cc-L{background:#FCEBEB;color:#791F1F;border:2px solid #E24B4A}
-.rca-ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:9px}
-.rca-ev-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
-.lbl-for{color:#0F6E56}.lbl-ag{color:#854F0B}
-.rca-ev-item{display:flex;gap:5px;font-size:11px;color:#1A1917;margin-bottom:4px;line-height:1.4}
-.rca-ev-item.miss{color:#888780}
-.rca-next{font-size:11px;color:#378ADD;padding-top:8px;border-top:1px solid #F5F4F0;display:flex;align-items:center;gap:5px}
+.rca-path-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:10px;box-shadow:var(--shadow);transition:box-shadow .15s}
+.rca-path-card:hover{box-shadow:var(--shadow-lift)}
+.rca-hdr{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.rca-num{width:26px;height:26px;border-radius:50%;background:var(--navy);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.rca-title{font-size:13px;font-weight:700;flex:1;line-height:1.35;color:var(--navy)}
+.conf-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.cc-H{background:var(--ok-bg);color:var(--ok);border:2px solid var(--ok)}
+.cc-M{background:var(--warn-bg);color:var(--warn);border:2px solid var(--orange)}
+.cc-L{background:var(--risk-bg);color:var(--risk);border:2px solid var(--risk)}
+.rca-ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+.rca-ev-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.lbl-for{color:var(--ok)}.lbl-ag{color:var(--warn)}
+.rca-ev-item{display:flex;gap:6px;font-size:11px;color:var(--ink);margin-bottom:5px;line-height:1.45}
+.rca-ev-item.miss{color:var(--ink-400)}
+.rca-next{font-size:11px;color:var(--teal-600);padding-top:10px;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px;font-weight:600}
+
 /* GMP DEFENSIBILITY */
-.def-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;margin-bottom:9px;overflow:hidden}
-.def-hdr{padding:11px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #F5F4F0}
-.def-sev{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.di-H{background:#FCEBEB;color:#A32D2D}
-.di-M{background:#FAEEDA;color:#854F0B}
-.di-L{background:#E6F1FB;color:#0C447C}
-.def-concern{font-size:12px;font-weight:700;flex:1}
-.def-sev-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700;flex-shrink:0}
-.def-body{padding:10px 14px;font-size:11px;color:#888780;line-height:1.6}
-.def-ref{margin-top:6px;padding-top:6px;border-top:1px solid #F5F4F0;font-size:10px;font-style:italic;display:flex;align-items:center;gap:5px}
+.def-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow)}
+.def-hdr{padding:13px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--line)}
+.def-sev{width:30px;height:30px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.di-H{background:var(--risk-bg);color:var(--risk)}
+.di-M{background:var(--warn-bg);color:var(--warn)}
+.di-L{background:var(--teal-50);color:var(--teal-600)}
+.def-concern{font-size:12px;font-weight:700;flex:1;color:var(--navy)}
+.def-sev-tag{font-size:9px;padding:3px 8px;border-radius:7px;font-weight:700;flex-shrink:0;letter-spacing:.02em}
+.def-body{padding:12px 16px;font-size:11px;color:var(--ink-600);line-height:1.65}
+.def-ref{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;font-style:normal;display:flex;align-items:center;gap:5px;color:var(--teal-600);font-weight:600}
+
 /* SIMILAR */
-.sim-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:12px 15px;margin-bottom:8px}
-.sim-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
-.sim-id{font-size:11px;font-weight:700;color:#378ADD;font-family:monospace}
-.sim-pct{font-size:12px;font-weight:700;color:#1D9E75}
-.sim-rc{font-size:13px;font-weight:700;margin-bottom:4px}
-.sim-meta{display:flex;gap:9px;font-size:11px;color:#888780;flex-wrap:wrap}
-.repeat-banner{background:#EEEDFE;border:1px solid #AFA9EC;border-radius:11px;padding:13px 15px;margin-bottom:13px;display:flex;gap:11px}
+.sim-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:9px;box-shadow:var(--shadow)}
+.sim-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sim-id{font-size:11px;font-weight:700;color:var(--teal-600);font-family:'JetBrains Mono',monospace}
+.sim-pct{font-size:13px;font-weight:700;color:var(--teal);font-family:'JetBrains Mono',monospace}
+.sim-rc{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--navy)}
+.sim-meta{display:flex;gap:11px;font-size:11px;color:var(--ink-600);flex-wrap:wrap;font-weight:500}
+.repeat-banner{background:var(--navy);border-radius:var(--r);padding:15px 17px;margin-bottom:14px;display:flex;gap:12px;color:#E8EDF6}
+
 /* CAPA */
-.capa-header-note{font-size:11px;color:#888780;font-style:italic;margin-bottom:10px}
-.capa-card{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:13px 15px;margin-bottom:8px}
-.capa-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
-.capa-opt-lbl{font-size:11px;font-weight:700;color:#888780;min-width:80px}
-.capa-action{font-size:13px;font-weight:700;flex:1}
-.type-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700}
-.tt-C{background:#E6F1FB;color:#0C447C}
-.tt-P{background:#E1F5EE;color:#085041}
-.prio-tag{font-size:9px;padding:2px 7px;border-radius:7px;font-weight:700}
-.pt-H{background:#FCEBEB;color:#A32D2D}
-.pt-M{background:#FAEEDA;color:#854F0B}
-.pt-L{background:#E1F5EE;color:#085041}
-.capa-metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
-.cm{background:#F5F4F0;border-radius:7px;padding:7px 10px}
-.cm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:2px}
-.cm-val{font-size:12px;font-weight:700}
-.capa-rationale{font-size:11px;color:#888780;line-height:1.6}
+.capa-header-note{font-size:11px;color:var(--ink-400);font-style:normal;margin-bottom:12px;font-weight:500}
+.capa-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;margin-bottom:9px;box-shadow:var(--shadow)}
+.capa-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.capa-opt-lbl{font-size:11px;font-weight:700;color:var(--ink-400);min-width:80px}
+.capa-action{font-size:13px;font-weight:700;flex:1;color:var(--navy)}
+.type-tag{font-size:9px;padding:3px 8px;border-radius:7px;font-weight:700;letter-spacing:.02em}
+.tt-C{background:var(--teal-50);color:var(--teal-600)}
+.tt-P{background:var(--ok-bg);color:var(--ok)}
+.prio-tag{font-size:9px;padding:3px 8px;border-radius:7px;font-weight:700;letter-spacing:.02em}
+.pt-H{background:var(--risk-bg);color:var(--risk)}
+.pt-M{background:var(--warn-bg);color:var(--warn)}
+.pt-L{background:var(--ok-bg);color:var(--ok)}
+.capa-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.cm{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 11px}
+.cm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);margin-bottom:3px}
+.cm-val{font-size:12px;font-weight:700;color:var(--ink)}
+.capa-rationale{font-size:11px;color:var(--ink-600);line-height:1.65}
+
 /* TABS */
-.tabs{display:flex;border-bottom:1px solid #E5E3DC;margin-bottom:14px}
-.tab{padding:6px 12px;font-size:11px;cursor:pointer;color:#888780;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;font-weight:600;transition:all .1s}
-.tab:hover{color:#1A1917}
-.tab.active{color:#1D9E75;border-bottom:2px solid #1D9E75;font-weight:700}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;gap:2px}
+.tab{padding:9px 15px;font-size:11px;cursor:pointer;color:var(--ink-400);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;font-weight:600;transition:all .12s;letter-spacing:.01em}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--navy);border-bottom:2px solid var(--orange);font-weight:700}
 .tp{display:none}
-.tp.active{display:block}
+.tp.active{display:block;animation:fadeUp .3s cubic-bezier(.16,1,.3,1)}
+
 /* FIELD BLOCKS */
-.fld{margin-bottom:11px}
-.fld-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:5px}
-.fld-val{font-size:12px;line-height:1.7;background:#F5F4F0;border:1px solid #E5E3DC;border-radius:8px;padding:10px 13px;white-space:pre-wrap;word-break:break-word}
-.fld-val.hi{background:#F8FDFB;border-color:#9FE1CB}
+.fld{margin-bottom:13px}
+.fld-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-600);margin-bottom:6px}
+.fld-val{font-size:12px;line-height:1.75;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 15px;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
+.fld-val.hi{background:var(--teal-50);border-color:var(--teal-100)}
+
 /* Q ITEMS */
-.q-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #F5F4F0;font-size:12px;line-height:1.5}
-.q-n{width:20px;height:20px;border-radius:50%;background:#F5F4F0;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#888780;flex-shrink:0;margin-top:1px}
+.q-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px;line-height:1.55;font-weight:500}
+.q-n{width:22px;height:22px;border-radius:50%;background:var(--navy);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:1px;font-family:'JetBrains Mono',monospace}
+
 /* EXPORT */
-.ex-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:18px}
-.ex-tile{background:#fff;border:1px solid #E5E3DC;border-radius:11px;padding:16px 11px;text-align:center;cursor:pointer;transition:all .12s}
-.ex-tile:hover{border-color:#1D9E75;background:#E1F5EE}
-.ex-tile-icon{font-size:26px;margin-bottom:8px}
-.ex-tile-nm{font-size:12px;font-weight:700;margin-bottom:2px}
-.ex-tile-sub{font-size:10px;color:#888780}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.ex-tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 12px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.ex-tile:hover{border-color:var(--teal);background:var(--teal-50);transform:translateY(-1px);box-shadow:var(--shadow-lift)}
+.ex-tile-icon{font-size:27px;margin-bottom:9px}
+.ex-tile-nm{font-size:12px;font-weight:700;margin-bottom:3px;color:var(--navy)}
+.ex-tile-sub{font-size:10px;color:var(--ink-400);font-weight:500}
+
 /* LOADING */
-.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 20px;color:#888780;gap:12px}
-.spin{width:24px;height:24px;border:2.5px solid #E5E3DC;border-top-color:#1D9E75;border-radius:50%;animation:sp .8s linear infinite}
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:54px 20px;color:var(--ink-400);gap:14px}
+.spin{width:26px;height:26px;border:2.5px solid var(--line);border-top-color:var(--orange);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.load-msg{font-size:13px;font-weight:600;color:#1A1917}
+.load-msg{font-size:13px;font-weight:600;color:var(--ink-600)}
+
 /* NAV ACTIONS */
-.pg-actions{display:flex;justify-content:space-between;margin-top:20px;padding-top:14px;border-top:1px solid #E5E3DC}
+.pg-actions{display:flex;justify-content:space-between;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+
 /* SOURCE TRACE */
-.src-trace{font-size:10px;color:#888780;display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
-.src-doc{font-size:9px;padding:1px 6px;border-radius:5px;background:#F5F4F0;border:1px solid #E5E3DC;color:#888780}
-.src-pg{font-size:9px;padding:1px 6px;border-radius:5px;background:#E6F1FB;border:1px solid #B5D4F4;color:#0C447C}
-.src-sec{font-size:9px;padding:1px 6px;border-radius:5px;background:#EEEDFE;border:1px solid #AFA9EC;color:#26215C}
+.src-trace{font-size:10px;color:var(--ink-400);display:flex;align-items:center;gap:5px;margin-top:4px;flex-wrap:wrap}
+.src-doc{font-size:9px;padding:2px 7px;border-radius:5px;background:var(--paper);border:1px solid var(--line);color:var(--ink-600);font-weight:600}
+.src-pg{font-size:9px;padding:2px 7px;border-radius:5px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-600);font-weight:600}
+.src-sec{font-size:9px;padding:2px 7px;border-radius:5px;background:var(--orange-50);border:1px solid #FAC4AC;color:var(--orange-600);font-weight:600}
+
+/* scrollbars */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:5px;border:2px solid var(--paper)}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-400)}
+
+/* responsive */
+@media(max-width:920px){
+  .sb{display:none}
+  .score-row,.score-2col{grid-template-columns:1fr}
+  .ex-grid{grid-template-columns:1fr 1fr}
+  .rca-ev-grid{grid-template-columns:1fr}
+  .main{padding:20px 16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -264,7 +343,7 @@ textarea:focus{border-color:#1D9E75}
 <!-- TOPBAR -->
 <div class="tb">
   <div class="tb-left">
-    <div class="logo">🔬</div>
+    <div class="logo">IIW</div>
     <div>
       <div class="app-name">Investigation Intelligence Workbench</div>
       <div class="app-sub" id="tb-status">No case loaded · upload PDF or paste text</div>
@@ -315,20 +394,44 @@ textarea:focus{border-color:#1D9E75}
   <div class="pg-title">Upload case documents</div>
   <div class="pg-sub">Upload PDF files or paste text. Server-side PDF extraction with page-level source traceability.</div>
 
+  <!-- Case metadata row -->
+  <div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+    <div style="flex:1;min-width:200px">
+      <label class="fl">Case / Deviation ID <span style="color:#888780;font-weight:400">(optional — overrides extracted ID)</span></label>
+      <input type="text" id="case-id-in" placeholder="e.g. QE-193825, DEV-2026-0042…" style="width:100%;padding:9px 11px;border:1px solid #D8D5CC;border-radius:7px;font-size:13px;font-family:inherit;background:#fff">
+    </div>
+    <div style="flex:1;min-width:200px">
+      <label class="fl">Investigation type <span style="color:#888780;font-weight:400">(tailors regulatory model)</span></label>
+      <select id="inv-type-in" style="width:100%;padding:9px 11px;border:1px solid #D8D5CC;border-radius:7px;font-size:13px;font-family:inherit;background:#fff">
+        <option value="auto">Auto-detect from documents</option>
+        <option value="OOS">OOS — Out of Specification</option>
+        <option value="OOT">OOT — Out of Trend / Stability</option>
+        <option value="Environmental">Environmental Excursion (EM)</option>
+        <option value="Equipment">Equipment / Facility Failure</option>
+        <option value="Documentation">Documentation / GDP Error</option>
+        <option value="DataIntegrity">Data Integrity (ALCOA+)</option>
+        <option value="Supplier">Supplier / Material Deviation</option>
+        <option value="Complaint">Product Complaint</option>
+        <option value="Process">Process Deviation (in-process)</option>
+        <option value="Microbial">Microbial / Sterility Excursion</option>
+      </select>
+    </div>
+  </div>
+
   <!-- Drop zone -->
   <div class="drop-zone" id="dz">
     <input type="file" id="fi" multiple accept=".pdf,.txt,.csv" onchange="handleFiles(this.files)">
     <div class="dz-icon">📁</div>
     <div class="dz-title">Drop files here or click to browse</div>
-    <div class="dz-sub">PDF · TXT · CSV · Multiple files supported · Text extracted automatically</div>
+    <div class="dz-sub">PDF · TXT · CSV · Multiple files supported · Text extracted automatically · Tag each file by type below</div>
   </div>
 
   <!-- File status cards -->
   <div class="file-cards" id="file-cards"></div>
 
   <!-- Paste area -->
-  <div style="margin-bottom:10px">
-    <label class="fl">Paste text (required if PDF extraction fails — also use for additional context)</label>
+  <div style="margin-bottom:10px" id="paste-wrap">
+    <label class="fl" id="paste-label">Paste text (required if PDF extraction fails — also use for additional context)</label>
     <textarea id="paste-in" rows="6" placeholder="Paste deviation text, investigation notes, or any relevant content here…"></textarea>
   </div>
   <div style="margin-bottom:13px">
@@ -336,7 +439,7 @@ textarea:focus{border-color:#1D9E75}
     <textarea id="extra-in" rows="2" placeholder="Known hypotheses, team context, prior similar events…"></textarea>
   </div>
 
-  <div class="alert al-i">ℹ️ PDF files are sent to a local extraction server (port 8100) to extract text. The extracted text is then sent to the Claude API for analysis. If the backend is not running, upload TXT files or use the paste area.</div>
+  <div class="alert al-i">ℹ️ PDF files are sent to the extraction server to extract text with page-level traceability. The extracted text is then sent to the Claude API for analysis. If a PDF is scanned (no text layer), paste the case text in the box above.</div>
 
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div style="font-size:11px;color:#888780" id="upload-count">No files loaded</div>
@@ -443,6 +546,13 @@ textarea:focus{border-color:#1D9E75}
     <div class="ex-tile" onclick="exportCSV()"><div class="ex-tile-icon">📊</div><div class="ex-tile-nm">Evidence CSV</div><div class="ex-tile-sub">Facts + gaps table</div></div>
     <div class="ex-tile" onclick="copyAll()"><div class="ex-tile-icon">📋</div><div class="ex-tile-nm">Copy all</div><div class="ex-tile-sub">Paste into QMS</div></div>
   </div>
+  <div class="fl" style="margin:14px 0 8px">QMS-ready field mapping — copy directly into your eQMS form fields</div>
+  <div class="ex-grid">
+    <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('veeva')"><div class="ex-tile-icon">🔷</div><div class="ex-tile-nm">Veeva Vault</div><div class="ex-tile-sub">QMS field structure</div></div>
+    <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('mastercontrol')"><div class="ex-tile-icon">🔶</div><div class="ex-tile-nm">MasterControl</div><div class="ex-tile-sub">CAPA / deviation fields</div></div>
+    <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('generic')"><div class="ex-tile-icon">⬛</div><div class="ex-tile-nm">Generic QMS</div><div class="ex-tile-sub">Universal field map</div></div>
+    <div class="ex-tile" onclick="window.print()"><div class="ex-tile-icon">🖨</div><div class="ex-tile-nm">Print / PDF</div><div class="ex-tile-sub">Full package</div></div>
+  </div>
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
     <div class="fl" style="margin:0">Full investigation package preview</div>
     <button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="window.print()">🖨 Print / PDF</button>
@@ -459,7 +569,7 @@ textarea:focus{border-color:#1D9E75}
 const BACKEND = 'https://web-production-cdad3.up.railway.app';
 const API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL   = 'claude-sonnet-4-20250514';
-const SYS = `You are an expert GMP deviation investigator, QA reviewer, and Lean Six Sigma Black Belt. Support a human investigator — do not make final decisions. Never invent facts. If evidence is missing say "Evidence not found." Separate facts from assumptions. Use GMP language. Cite source document name and page number for every key fact. Never blame human error without specific documented evidence. Respond ONLY with valid compact JSON — no markdown fences, no preamble.`;
+const SYS = `You are an expert GMP deviation investigator, QA reviewer, and Lean Six Sigma Black Belt. Support a human investigator — do not make final decisions. Never invent facts. If evidence is missing say "Evidence not found." Separate facts from assumptions. Use GMP language. Cite source document name and page number for every key fact. Never blame human error without specific documented evidence. When the investigation type is Data Integrity, Microbial/Sterility, or involves patient safety, calibrate risk toward HIGH unless evidence clearly supports lower. A passing readiness score (75+) requires that NO closure-blocking prerequisite remains open. Respond ONLY with valid compact JSON — no markdown fences, no preamble.`;
 
 let D = {};
 let uploadedFiles = []; // {name, extractedText, pages, totalPages, success, error}
@@ -473,7 +583,7 @@ dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over
 async function handleFiles(fileList) {
   for (const file of fileList) {
     if (uploadedFiles.find(f => f.name === file.name)) continue;
-    const entry = { name: file.name, extractedText: '', pages: [], totalPages: 0, success: false, error: null, processing: true };
+    const entry = { name: file.name, extractedText: '', pages: [], totalPages: 0, success: false, error: null, processing: true, docType: 'auto' };
     uploadedFiles.push(entry);
     renderFileCards();
 
@@ -544,21 +654,52 @@ function renderFileCards() {
         </div>`;
       }
     } else if (f.is_scanned) {
-      badge = '<span class="fc-badge fcb-err">⚠ Scanned PDF — no text layer. Paste text below.</span>';
+      badge = '<span class="fc-badge fcb-err">⚠ Scanned PDF — no text layer detected.</span><button class="btn btn-s" style="margin-left:8px;padding:3px 10px;font-size:11px" onclick="focusPaste()">↓ Paste text manually</button>';
     } else if (f.error) {
-      badge = `<span class="fc-badge fcb-err">✗ ${esc(f.error.slice(0,80))}</span>`;
+      badge = `<span class="fc-badge fcb-err">✗ ${esc(f.error.slice(0,80))}</span>` + (f.name.toLowerCase().endsWith('.pdf') ? '<button class="btn btn-s" style="margin-left:8px;padding:3px 10px;font-size:11px" onclick="focusPaste()">↓ Paste text manually</button>' : '');
     } else {
       badge = '<span class="fc-badge fcb-warn">—</span>';
     }
+    const typeSelector = `<select onchange="setDocType('${esc(f.name)}', this.value)" style="margin-top:7px;padding:4px 8px;border:1px solid #D8D5CC;border-radius:6px;font-size:11px;font-family:inherit;background:#fff;color:#555">
+      <option value="auto"${f.docType==='auto'?' selected':''}>📎 Document type: auto-detect</option>
+      <option value="Deviation Report"${f.docType==='Deviation Report'?' selected':''}>Deviation / Quality Incident Report</option>
+      <option value="CAPA Record"${f.docType==='CAPA Record'?' selected':''}>CAPA Record</option>
+      <option value="Batch Record"${f.docType==='Batch Record'?' selected':''}>Batch / Manufacturing Record</option>
+      <option value="Investigation Report"${f.docType==='Investigation Report'?' selected':''}>Investigation Report</option>
+      <option value="SOP"${f.docType==='SOP'?' selected':''}>SOP / Procedure</option>
+      <option value="Lab Result"${f.docType==='Lab Result'?' selected':''}>Lab / QC Result (OOS/OOT)</option>
+      <option value="Complaint"${f.docType==='Complaint'?' selected':''}>Complaint Record</option>
+      <option value="Supplier Record"${f.docType==='Supplier Record'?' selected':''}>Supplier / 3PL Record</option>
+      <option value="Audit Finding"${f.docType==='Audit Finding'?' selected':''}>Audit Finding</option>
+      <option value="Other"${f.docType==='Other'?' selected':''}>Other</option>
+    </select>`;
     return `<div class="file-card">
       <div class="fc-icon">${f.name.endsWith('.pdf') ? '📋' : '📄'}</div>
       <div class="fc-body">
         <div class="fc-name">${esc(f.name)}</div>
-        ${badge}${preview}
+        ${badge}${f.success ? typeSelector : ''}${preview}
       </div>
       <button class="fc-remove" onclick="removeFile('${esc(f.name)}')" title="Remove">×</button>
     </div>`;
   }).join('');
+}
+
+function setDocType(name, type) {
+  const f = uploadedFiles.find(x => x.name === name);
+  if (f) f.docType = type;
+}
+
+function focusPaste() {
+  const wrap = document.getElementById('paste-wrap');
+  const ta = document.getElementById('paste-in');
+  const lbl = document.getElementById('paste-label');
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  ta.style.border = '2px solid #FF6B35';
+  ta.style.boxShadow = '0 0 0 3px rgba(255,107,53,0.15)';
+  lbl.style.color = '#FF6B35';
+  lbl.style.fontWeight = '700';
+  setTimeout(() => ta.focus(), 400);
+  setTimeout(() => { ta.style.border = '1px solid #D8D5CC'; ta.style.boxShadow = 'none'; lbl.style.color = ''; lbl.style.fontWeight = ''; }, 4000);
 }
 
 function updateUploadCount() {
@@ -571,7 +712,8 @@ function updateUploadCount() {
 function buildContext() {
   let ctx = '';
   uploadedFiles.filter(f => f.success && f.extractedText).forEach(f => {
-    ctx += `\n\n=== DOCUMENT: ${f.name} (${f.totalPages} pages) ===\n${f.extractedText}`;
+    const typeTag = (f.docType && f.docType !== 'auto') ? ` [TYPE: ${f.docType}]` : '';
+    ctx += `\n\n=== DOCUMENT: ${f.name}${typeTag} (${f.totalPages} pages) ===\n${f.extractedText}`;
   });
   const paste = document.getElementById('paste-in').value.trim();
   const extra = document.getElementById('extra-in').value.trim();
@@ -595,7 +737,7 @@ async function callClaude(prompt) {
 
 function jp(s) { try { return JSON.parse(s); } catch { return null; } }
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function sc(v) { return v >= 75 ? '#1D9E75' : v >= 50 ? '#EF9F27' : '#E24B4A'; }
+function sc(v) { return v >= 75 ? '#15856B' : v >= 50 ? '#B26A00' : '#C8362F'; }
 
 // ── NAV ──────────────────────────────────────────────────────────────────────
 function goPg(n) {
@@ -627,9 +769,36 @@ function loadingEl(id, msg) {
 }
 
 // ── MAIN RUN ─────────────────────────────────────────────────────────────────
+function getInvTypeLabel() {
+  const labels = {auto:'',OOS:'OOS Investigation',OOT:'OOT / Stability',Environmental:'Environmental Excursion',Equipment:'Equipment Failure',Documentation:'Documentation Error',DataIntegrity:'Data Integrity',Supplier:'Supplier Deviation',Complaint:'Product Complaint',Process:'Process Deviation',Microbial:'Microbial Excursion'};
+  return labels[D.inv_type] || '';
+}
+
+// ── INVESTIGATION TYPE GUIDANCE ──────────────────────────────────────────────
+function getInvTypeGuidance() {
+  const t = document.getElementById('inv-type-in').value;
+  const map = {
+    'OOS': 'This is an OUT-OF-SPECIFICATION (OOS) investigation. Apply FDA OOS guidance (2006) Phase I (lab investigation: analyst error, instrument, method, calculation) and Phase II (full-scale: manufacturing review, batch impact, other batches). Closure prerequisites MUST include: lab investigation conclusion, hypothesis testing/retest justification, batch disposition decision, and impact on other batches. Flag any "testing into compliance" pattern.',
+    'OOT': 'This is an OUT-OF-TREND / STABILITY investigation. Evaluate trend analysis rigor, comparison to historical data, stability program impact, and whether shelf-life or specifications are affected. Closure prerequisites: trend confirmation, stability impact assessment, and batch/registration impact.',
+    'Environmental': 'This is an ENVIRONMENTAL MONITORING (EM) EXCURSION. Evaluate against Annex 1 / USP <1116>. Assess: grade/classification of area, organism identification, trend vs. alert/action limits, impact on product exposed, gowning/aseptic technique. Closure prerequisites: organism ID, product impact assessment, and area re-qualification if needed.',
+    'Equipment': 'This is an EQUIPMENT / FACILITY FAILURE investigation. Evaluate qualification status, maintenance/calibration history, and impact on product processed. Closure prerequisites: equipment requalification, maintenance record review, and impact on affected batches.',
+    'Documentation': 'This is a DOCUMENTATION / GOOD DOCUMENTATION PRACTICE (GDP) error. Evaluate against ALCOA+ principles. Assess whether the error is transcription, contemporaneity, or completeness. Closure prerequisites: error correction with audit trail, ALCOA+ impact, and assessment of systemic GDP issues.',
+    'DataIntegrity': 'This is a DATA INTEGRITY investigation — HIGHEST regulatory sensitivity. Apply ALCOA+ rigorously (Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available). Assess audit trail review, scope of affected data, potential for falsification, and systemic vs isolated. This typically warrants HIGH risk classification. Closure prerequisites: full data scope assessment, audit trail review, root cause distinguishing error vs intent, and management/quality oversight.',
+    'Supplier': 'This is a SUPPLIER / MATERIAL DEVIATION. Evaluate supplier quality agreement, incoming inspection controls, CoA review, and supplier CAPA. Closure prerequisites: material disposition, supplier CAPA effectiveness verification, and assessment of other lots from same supplier.',
+    'Complaint': 'This is a PRODUCT COMPLAINT investigation. Evaluate complaint classification, batch traceability, reserve sample testing, and reportability (field alert / recall assessment). Closure prerequisites: batch investigation, reportability determination, and trend assessment against similar complaints.',
+    'Process': 'This is an IN-PROCESS / PROCESS DEVIATION. Evaluate against validated process parameters and proven acceptable ranges. Assess impact on CQAs and batch quality. Closure prerequisites: process impact assessment, batch disposition, and validation impact.',
+    'Microbial': 'This is a MICROBIAL / STERILITY EXCURSION — HIGH patient-safety sensitivity. Evaluate bioburden/sterility data, organism identification, aseptic process review, and batch sterility assurance. Closure prerequisites: organism ID, sterility assurance impact, and batch disposition with microbiologist review.'
+  };
+  return map[t] ? `\n\nINVESTIGATION TYPE CONTEXT: ${map[t]}` : '\n\nINVESTIGATION TYPE: Auto-detect the investigation type from the documents and apply the appropriate regulatory framework.';
+}
+
 async function runAll() {
   const ctx = buildContext();
   if (!ctx) { alert('Please upload documents or paste deviation text first.'); return; }
+
+  const invGuidance = getInvTypeGuidance();
+  const manualCaseId = document.getElementById('case-id-in').value.trim();
+  D.inv_type = document.getElementById('inv-type-in').value;
 
   const btn = document.getElementById('run-btn');
   btn.disabled = true;
@@ -647,11 +816,11 @@ async function runAll() {
 
     const r1 = jp(await callClaude(`Analyze this GMP deviation package. For EVERY fact, include the document name and page number as source reference. Return ONLY valid JSON:
 {"case_id":"deviation ID or Unknown","event_summary":"2-3 sentence VP-level summary","risk_level":"High|Medium|Low","readiness_score":72,"readiness_status":"Not ready for closure|Needs additional evidence|Ready for QA review|Ready for closure","quality_score":48,"quality_rationale":"one sentence","quality_dimensions":[{"dimension":"Problem statement","score":80},{"dimension":"Evidence collection","score":65},{"dimension":"Scope evaluation","score":30},{"dimension":"Root cause logic","score":20},{"dimension":"CAPA effectiveness","score":15}],"ai_quality_commentary":"2-3 sentences on investigation quality gaps","key_findings":["finding with source ref"],"top_rca_path":"most probable root cause path","top_rca_confidence":"High|Medium|Low","do_not_close_until":["mandatory item 1 with source","mandatory item 2"],"timeline":[{"time":"datetime","event":"description","source_doc":"filename","source_page":"p.X","source_section":"Section name","type":"normal|warning|critical"}]}
-Source documents: ${docNames}
+Source documents: ${docNames}${invGuidance}
 Package:
 ${ctx}`));
 
-    D.case_id = r1?.case_id || 'Unknown';
+    D.case_id = manualCaseId || r1?.case_id || 'Unknown';
     D.summary = r1?.event_summary || '';
     D.risk = r1?.risk_level || 'Unknown';
     D.readiness = r1?.readiness_score || 0;
@@ -692,7 +861,7 @@ ${ctx}`));
     setStatus('Call 3/3 · RCA + defensibility + CAPA options…');
 
     const r3 = jp(await callClaude(`Analyze this GMP deviation package. Cite sources throughout. Return ONLY valid JSON:
-{"problem_statement":"...","scope":"...","impact_assessment":"...","rca_discussion":"full narrative with source citations","contributing_factors":["factor — Source: doc p.X"],"rca_paths":[{"path":"hypothesis","evidence_for":["✓ point — Source: doc p.X"],"evidence_missing":["✗ gap description"],"confidence":"High|Medium|Low","confidence_pct":70,"recommended_next_step":"..."}],"open_questions":["question 1","question 2"],"investigator_narrative":"full GMP-style draft narrative for QMS","gmp_concerns":[{"concern":"...","severity":"High|Medium|Low","explanation":"...","reference":"21 CFR or ICH ref","source_doc":"doc","source_page":"p.X"}],"gmp_overall":"High|Medium|Low","similar_cases":[{"id":"DEV-XXXX","similarity_pct":84,"root_cause":"...","capa":"...","outcome":"...","months_no_recurrence":18,"source":"where found"}],"repeat_signal":{"detected":false,"common_factor":"","related_events":[],"recommendation":""},"capa_options":[{"label":"Option A","action":"...","type":"Corrective|Preventive","risk_reduction":"High|Medium|Low","effort":"High|Medium|Low","rationale":"...","priority":"High|Medium|Low"}]}
+{"problem_statement":"...","scope":"...","impact_assessment":"...","rca_discussion":"full narrative with source citations","contributing_factors":["factor — Source: doc p.X"],"rca_paths":[{"path":"hypothesis","evidence_for":["✓ point — Source: doc p.X"],"evidence_missing":["✗ gap description"],"confidence":"High|Medium|Low","confidence_pct":70,"recommended_next_step":"..."}],"open_questions":["question 1","question 2"],"investigator_narrative":"full GMP-style draft narrative for QMS","gmp_concerns":[{"concern":"...","severity":"High|Medium|Low","explanation":"...","reference":"21 CFR or ICH ref","source_doc":"doc","source_page":"p.X"}],"gmp_overall":"High|Medium|Low","similar_cases":[{"id":"DEV-XXXX","similarity_pct":84,"root_cause":"...","capa":"...","outcome":"...","months_no_recurrence":18,"source":"where found"}],"repeat_signal":{"detected":false,"common_factor":"","related_events":[],"recommendation":""},"capa_options":[{"label":"Option A","action":"...","type":"Corrective|Preventive","risk_reduction":"High|Medium|Low","effort":"High|Medium|Low","rationale":"...","priority":"High|Medium|Low"}]}${invGuidance}
 Package:
 ${ctx}`));
 
@@ -764,15 +933,18 @@ function renderExec() {
   const r = D.readiness||0, q = D.quality||0;
   const cs = (D.readiness_status||'').includes('Not ready')?'ct-block':(D.readiness_status||'').includes('Needs')?'ct-caution':'ct-ready';
   const ci = cs==='ct-block'?'🚫':cs==='ct-caution'?'⚠️':'✅';
+  const dncuCount = (D.do_not_close_until || []).length;
+  const readSub = dncuCount ? `${esc(D.readiness_status||'')} · ${dncuCount} closure blocker${dncuCount>1?'s':''} open` : esc(D.readiness_status||'');
+  const invTypeLabel = (typeof getInvTypeLabel === 'function') ? getInvTypeLabel() : '';
 
   let h = `<div class="exec-card">
-    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:11px">Investigation Intelligence Workbench — Executive Summary</div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888780;margin-bottom:11px">Investigation Intelligence Workbench — Executive Summary${invTypeLabel?` · ${invTypeLabel}`:''}</div>
     <div class="exec-id">${esc(D.case_id)}</div>
     ${D.summary?`<div class="alert al-g" style="margin-bottom:14px">ℹ️ ${esc(D.summary)}</div>`:''}
     <div class="score-row">
-      <div class="score-box"><div class="sb-lbl">📋 Investigation readiness</div><div class="sb-num" style="color:${sc(r)}">${r}%</div><div class="sb-sub">${esc(D.readiness_status||'')}</div><div class="sb-bar"><div class="sb-fill" style="width:${r}%;background:${sc(r)}"></div></div></div>
+      <div class="score-box"><div class="sb-lbl">📋 Investigation readiness</div><div class="sb-num" style="color:${sc(r)}">${r}%</div><div class="sb-sub">${readSub}</div><div class="sb-bar"><div class="sb-fill" style="width:${r}%;background:${sc(r)}"></div></div></div>
       <div class="score-box"><div class="sb-lbl">⭐ Investigation quality</div><div class="sb-num" style="color:${sc(q)}">${q}%</div><div class="sb-sub">${esc(D.quality_rationale||'')}</div><div class="sb-bar"><div class="sb-fill" style="width:${q}%;background:${sc(q)}"></div></div></div>
-      <div class="score-box"><div class="sb-lbl">🛡 GMP defensibility risk</div><div class="sb-num" style="color:${D.risk==='High'?'#E24B4A':D.risk==='Medium'?'#EF9F27':'#1D9E75'}">${esc(D.risk||'—')}</div><div class="sb-sub">Based on investigation state</div></div>
+      <div class="score-box"><div class="sb-lbl">🛡 GMP defensibility risk</div><div class="sb-num" style="color:${D.risk==='High'?'#C8362F':D.risk==='Medium'?'#B26A00':'#15856B'}">${esc(D.risk||'—')}</div><div class="sb-sub">Based on investigation state</div></div>
     </div>
     <div class="closure-tag ${cs}">${ci} Closure status: ${esc(D.readiness_status||'Pending analysis')}</div>`;
 
@@ -786,7 +958,7 @@ function renderExec() {
 
   if (D.key_findings?.length) {
     h += `<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888780;margin-bottom:8px">Key findings</div>`;
-    D.key_findings.forEach(f => { h += `<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid #F5F4F0;font-size:12px"><div style="width:6px;height:6px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:4px"></div><div>${esc(f)}</div></div>`; });
+    D.key_findings.forEach(f => { h += `<div style="display:flex;gap:7px;padding:5px 0;border-bottom:1px solid #F5F4F0;font-size:12px"><div style="width:6px;height:6px;border-radius:50%;background:#FF6B35;flex-shrink:0;margin-top:4px"></div><div>${esc(f)}</div></div>`; });
     h += '</div>';
   }
   if (D.top_rca_path) {
@@ -908,7 +1080,7 @@ function renderEvidence() {
 function renderGraph() {
   const nodes = D.graph_nodes||[], edges = D.graph_edges||[];
   if (!nodes.length) { document.getElementById('gr-out').innerHTML = '<div style="color:#888780;font-style:italic">No graph data.</div>'; return; }
-  const typeC={event:'#E24B4A',equipment:'#378ADD',process:'#1D9E75',material:'#EF9F27',personnel:'#7F77DD',environment:'#0F6E56',default:'#888780'};
+  const typeC={event:'#C8362F',equipment:'#17A2B8',process:'#15856B',material:'#FF6B35',personnel:'#1B2D5A',environment:'#1391A5',default:'#8A94A6'};
   const typeBg={event:'#FCEBEB',equipment:'#E6F1FB',process:'#E1F5EE',material:'#FAEEDA',personnel:'#EEEDFE',environment:'#E1F5EE',default:'#F5F4F0'};
   const W=540,H=270,cx=W/2,cy=H/2,r=95;
   const pos={};
@@ -997,13 +1169,55 @@ function renderRCA() {
 
   // Narrative
   let narrH = '';
-  const flds = [['Problem statement',rca.problem_statement,false],['Scope',rca.scope,false],['Impact assessment',rca.impact_assessment,false],['RCA discussion',rca.rca_discussion,false],['Full investigation narrative (draft — ready for QMS review)',rca.investigator_narrative,true]];
+  const flds = [['Problem statement',rca.problem_statement,false],['Scope',rca.scope,false],['Impact assessment',rca.impact_assessment,false],['RCA discussion',rca.rca_discussion,false]];
   flds.forEach(([lbl,val,hi]) => { if(val) narrH += `<div class="fld"><div class="fld-lbl">${lbl}</div><div class="fld-val${hi?' hi':''}">${esc(val)}</div></div>`; });
+  // Editable full narrative
+  if (rca.investigator_narrative) {
+    if (D.edited_narrative === undefined) D.edited_narrative = rca.investigator_narrative;
+    narrH += `<div class="fld">
+      <div class="fld-lbl" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Full investigation narrative (draft — editable, ready for QMS)</span>
+        <button class="btn btn-s" style="padding:3px 12px;font-size:11px" onclick="toggleNarrativeEdit()" id="narr-edit-btn">✎ Edit</button>
+      </div>
+      <div class="fld-val hi" id="narr-display">${esc(D.edited_narrative)}</div>
+      <textarea id="narr-edit" style="display:none;width:100%;min-height:240px;padding:12px;border:2px solid #17A2B8;border-radius:8px;font-size:12px;font-family:inherit;line-height:1.7;background:#fff">${esc(D.edited_narrative)}</textarea>
+      <div id="narr-edit-actions" style="display:none;margin-top:8px;gap:8px">
+        <button class="btn btn-p" style="padding:5px 14px;font-size:12px" onclick="saveNarrative()">✓ Save changes</button>
+        <button class="btn btn-s" style="padding:5px 14px;font-size:12px;margin-left:6px" onclick="cancelNarrative()">Cancel</button>
+        <button class="btn btn-s" style="padding:5px 14px;font-size:12px;margin-left:6px" onclick="resetNarrative()">↺ Reset to AI draft</button>
+      </div>
+    </div>`;
+  }
   document.getElementById('rca-narrative').innerHTML = narrH || '<div style="color:#888780;font-style:italic">No narrative.</div>';
 
   // Questions
   let qH = (rca.open_questions||[]).map((q,i) => `<div class="q-item"><div class="q-n">${i+1}</div><div>${esc(q)}</div></div>`).join('');
   document.getElementById('rca-questions').innerHTML = qH || '<div style="color:#888780;font-style:italic">No open questions.</div>';
+}
+
+function toggleNarrativeEdit() {
+  document.getElementById('narr-display').style.display = 'none';
+  document.getElementById('narr-edit').style.display = 'block';
+  document.getElementById('narr-edit-actions').style.display = 'flex';
+  document.getElementById('narr-edit-btn').style.display = 'none';
+}
+function saveNarrative() {
+  D.edited_narrative = document.getElementById('narr-edit').value;
+  document.getElementById('narr-display').textContent = D.edited_narrative;
+  cancelNarrative();
+  renderExport();
+}
+function cancelNarrative() {
+  document.getElementById('narr-edit').value = D.edited_narrative;
+  document.getElementById('narr-display').style.display = 'block';
+  document.getElementById('narr-edit').style.display = 'none';
+  document.getElementById('narr-edit-actions').style.display = 'none';
+  document.getElementById('narr-edit-btn').style.display = 'inline-block';
+}
+function resetNarrative() {
+  D.edited_narrative = D.rca?.investigator_narrative || '';
+  document.getElementById('narr-edit').value = D.edited_narrative;
+  document.getElementById('narr-display').textContent = D.edited_narrative;
 }
 
 // ── RENDER: GMP DEFENSIBILITY ─────────────────────────────────────────────────
@@ -1028,7 +1242,7 @@ function renderSimilar() {
   const items = D.similar||[], rep = D.repeat;
   let h = '';
   if (rep?.detected) {
-    h += `<div class="repeat-banner"><span style="font-size:22px;flex-shrink:0">🔄</span><div><div style="font-size:14px;font-weight:700;color:#26215C">Repeat event signal detected</div><div style="font-size:12px;color:#534AB7;margin-top:3px">Common factor: ${esc(rep.common_factor||'—')}</div>${rep.related_events?.length?`<div style="font-size:12px;color:#7F77DD;margin-top:1px">Related: ${rep.related_events.map(esc).join(' · ')}</div>`:''} ${rep.recommendation?`<div style="font-size:12px;color:#3C3489;margin-top:4px">${esc(rep.recommendation)}</div>`:''}</div></div>`;
+    h += `<div class="repeat-banner"><span style="font-size:22px;flex-shrink:0">🔄</span><div><div style="font-size:14px;font-weight:700;color:#fff">Repeat event signal detected</div><div style="font-size:12px;color:#C9D3E8;margin-top:3px">Common factor: ${esc(rep.common_factor||'—')}</div>${rep.related_events?.length?`<div style="font-size:12px;color:#9DB0D4;margin-top:1px">Related: ${rep.related_events.map(esc).join(' · ')}</div>`:''} ${rep.recommendation?`<div style="font-size:12px;color:#E8EDF6;margin-top:4px">${esc(rep.recommendation)}</div>`:''}</div></div>`;
   }
   if (!items.length) {
     h += '<div class="alert al-i">ℹ️ No similar historical cases found in the provided documents. In a production deployment, this queries your QMS deviation database for pattern matching across all historical events.</div>';
@@ -1049,8 +1263,8 @@ function renderCAPA() {
   items.forEach((c,i) => {
     const t=(c.type||'C')[0], p=(c.priority||'M')[0].toUpperCase();
     const rr=c.risk_reduction||'Medium', ef=c.effort||'Medium';
-    const rrc = rr==='High'?'#1D9E75':rr==='Medium'?'#EF9F27':'#888780';
-    const efc = ef==='High'?'#E24B4A':ef==='Medium'?'#EF9F27':'#1D9E75';
+    const rrc = rr==='High'?'#15856B':rr==='Medium'?'#B26A00':'#8A94A6';
+    const efc = ef==='High'?'#C8362F':ef==='Medium'?'#B26A00':'#15856B';
     h += `<div class="capa-card">
       <div class="capa-hdr">
         <span class="capa-opt-lbl">Option ${lbls[i]||i+1}</span>
@@ -1153,7 +1367,7 @@ function buildFullText() {
     o+='\n';
   }
 
-  if (rca.investigator_narrative) o+=`17. FULL INVESTIGATION NARRATIVE (DRAFT)\n${rca.investigator_narrative}\n\n`;
+  if (rca.investigator_narrative) o+=`17. FULL INVESTIGATION NARRATIVE (DRAFT)\n${D.edited_narrative || rca.investigator_narrative}\n\n`;
 
   o+='═══════════════════════════════════════════════════════════\n';
   o+='DECISION-SUPPORT ONLY — AI-GENERATED DRAFT\n';
@@ -1177,7 +1391,7 @@ function exportWord() { if(!D.summary&&!D.rca){alert('Run analysis first.');retu
 function exportJSON() {
   if(!D.summary&&!D.rca){alert('Run analysis first.');return;}
   const pkg={
-    meta:{generated:new Date().toISOString(),case_id:D.case_id,status:'DRAFT',disclaimer:'Decision-support only. Human QA review required.',readiness:D.readiness,quality:D.quality,risk:D.risk,closure_status:D.readiness_status},
+    meta:{generated:new Date().toISOString(),case_id:D.case_id,investigation_type:getInvTypeLabel()||'Auto-detected',status:'DRAFT',disclaimer:'Decision-support only. Human QA review required.',readiness:D.readiness,quality:D.quality,risk:D.risk,closure_status:D.readiness_status},
     do_not_close_until:D.do_not_close_until||[],
     event_summary:D.summary, key_findings:D.key_findings, timeline:D.timeline,
     evidence:D.evidence, rca:D.rca,
@@ -1204,12 +1418,176 @@ function copyAll() {
   navigator.clipboard.writeText(buildFullText()).then(()=>alert('Copied to clipboard.')).catch(()=>{});
 }
 
+function exportQMS(system) {
+  if(!D.summary&&!D.rca){alert('Run analysis first.');return;}
+  const rca=D.rca||{}, ev=D.evidence||{}, gmp=D.gmp||{};
+  const narrative = D.edited_narrative || rca.investigator_narrative || '';
+  const dncu = D.do_not_close_until || [];
+  const capas = rca.capa_options || [];
+  const rootCause = D.top_rca_path || (rca.rca_paths&&rca.rca_paths[0]?.path) || 'See RCA workbench — multiple paths under investigation';
+  const facts = (ev.confirmed_facts||[]).map(f=>`• ${f.fact} [${f.source_doc||''} ${f.source_page||''}]`).join('\n');
+  const gaps = (ev.missing_evidence||[]).map(m=>`• ${m.closure_blocker?'[BLOCKER] ':''}${m.item} — ${m.why_needed||''}`).join('\n');
+  const correctiveCapa = capas.filter(c=>c.type==='Corrective').map(c=>`• ${c.action} (${c.priority} priority)`).join('\n') || 'See CAPA options screen';
+  const preventiveCapa = capas.filter(c=>c.type==='Preventive').map(c=>`• ${c.action} (${c.priority} priority)`).join('\n') || 'See CAPA options screen';
+
+  let out='', fname='';
+  const HDR = `*** AI-ASSISTED DRAFT — QA REVIEW & APPROVAL REQUIRED BEFORE QMS ENTRY ***\nGenerated by Investigation Intelligence Workbench · ${new Date().toLocaleString()}\n\n`;
+
+  if (system==='veeva') {
+    fname='veeva_vault';
+    out = HDR +
+`╔══════════════════════════════════════════════════════════╗
+║  VEEVA VAULT QMS — QUALITY EVENT FIELD MAPPING            ║
+╚══════════════════════════════════════════════════════════╝
+
+[ Quality Event ID ]
+${D.case_id||'—'}
+
+[ Quality Event Type ]
+${getInvTypeLabel()||'Deviation'}
+
+[ Short Description / Title ]
+${(D.summary||'').slice(0,140)}
+
+[ Detailed Description ]
+${D.summary||''}
+
+[ Risk Classification ]
+${D.risk||'To be assessed'}
+
+[ Investigation Summary (QInvestigation object) ]
+${narrative}
+
+[ Root Cause (Root Cause object) ]
+${rootCause}
+
+[ Confirmed Facts / Objective Evidence ]
+${facts||'See evidence map'}
+
+[ Open Items / Closure Prerequisites (blocks State Change to Closed) ]
+${dncu.map((d,i)=>`${i+1}. ${d}`).join('\n')||'None identified'}
+
+[ Corrective Actions (CAPA Action object — type: Corrective) ]
+${correctiveCapa}
+
+[ Preventive Actions (CAPA Action object — type: Preventive) ]
+${preventiveCapa}
+
+[ Quality Risk / Inspection Defensibility Notes ]
+Overall GMP defensibility: ${gmp.gmp_overall||'—'}
+${(gmp.gmp_concerns||[]).map(c=>`• [${c.severity}] ${c.concern} (${c.reference||''})`).join('\n')}
+`;
+  } else if (system==='mastercontrol') {
+    fname='mastercontrol';
+    out = HDR +
+`╔══════════════════════════════════════════════════════════╗
+║  MASTERCONTROL — DEVIATION / CAPA FIELD MAPPING           ║
+╚══════════════════════════════════════════════════════════╝
+
+[ Record Number ]
+${D.case_id||'—'}
+
+[ Event Type ]
+${getInvTypeLabel()||'Deviation'}
+
+[ Problem Statement ]
+${rca.problem_statement||D.summary||''}
+
+[ Description of Event ]
+${D.summary||''}
+
+[ Scope ]
+${rca.scope||'See investigation'}
+
+[ Impact Assessment ]
+${rca.impact_assessment||''}
+
+[ Risk Level ]
+${D.risk||'To be assessed'}
+
+[ Investigation / Root Cause Analysis ]
+${narrative}
+
+[ Root Cause Determination ]
+${rootCause}
+
+[ Supporting Evidence ]
+${facts||'See evidence map'}
+
+[ Items Outstanding Before Closure ]
+${dncu.map((d,i)=>`${i+1}. ${d}`).join('\n')||'None identified'}
+
+[ Corrective Action Plan ]
+${correctiveCapa}
+
+[ Preventive Action Plan ]
+${preventiveCapa}
+
+[ Effectiveness Check Required ]
+${capas.length?'Yes — verify CAPA effectiveness per SOP timeline':'To be determined'}
+`;
+  } else {
+    fname='generic_qms';
+    out = HDR +
+`╔══════════════════════════════════════════════════════════╗
+║  GENERIC eQMS — UNIVERSAL FIELD MAPPING                   ║
+╚══════════════════════════════════════════════════════════╝
+
+DEVIATION / EVENT ID:        ${D.case_id||'—'}
+INVESTIGATION TYPE:          ${getInvTypeLabel()||'Deviation'}
+RISK CLASSIFICATION:         ${D.risk||'To be assessed'}
+READINESS:                   ${D.readiness||'—'}%  |  QUALITY: ${D.quality||'—'}%
+CLOSURE STATUS:              ${D.readiness_status||'—'}
+
+─── 1. EVENT DESCRIPTION ───
+${D.summary||''}
+
+─── 2. PROBLEM STATEMENT ───
+${rca.problem_statement||''}
+
+─── 3. SCOPE ───
+${rca.scope||''}
+
+─── 4. IMPACT ASSESSMENT ───
+${rca.impact_assessment||''}
+
+─── 5. INVESTIGATION NARRATIVE ───
+${narrative}
+
+─── 6. ROOT CAUSE ───
+${rootCause}
+
+─── 7. SUPPORTING EVIDENCE ───
+${facts||'See evidence map'}
+
+─── 8. EVIDENCE GAPS ───
+${gaps||'None identified'}
+
+─── 9. CLOSURE PREREQUISITES (DO NOT CLOSE UNTIL) ───
+${dncu.map((d,i)=>`${i+1}. ${d}`).join('\n')||'None identified'}
+
+─── 10. CORRECTIVE ACTIONS ───
+${correctiveCapa}
+
+─── 11. PREVENTIVE ACTIONS ───
+${preventiveCapa}
+
+─── 12. GMP DEFENSIBILITY ───
+Overall: ${gmp.gmp_overall||'—'}
+${(gmp.gmp_concerns||[]).map(c=>`• [${c.severity}] ${c.concern} (${c.reference||''})`).join('\n')}
+`;
+  }
+  dl(out, `${fname}_${D.case_id||Date.now()}.txt`, 'text/plain');
+}
+
 function resetAll() {
   if(D.summary&&!confirm('Clear this case and start fresh?'))return;
   D={}; uploadedFiles=[];
   renderFileCards(); updateUploadCount();
   document.getElementById('paste-in').value='';
   document.getElementById('extra-in').value='';
+  const cid=document.getElementById('case-id-in'); if(cid)cid.value='';
+  const itp=document.getElementById('inv-type-in'); if(itp)itp.value='auto';
   setStatus('No case loaded · upload PDF or paste text');
   document.getElementById('tb-chips').innerHTML='<button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="resetAll()">↺ New case</button>';
   document.getElementById('sb-bottom').style.display='none';
