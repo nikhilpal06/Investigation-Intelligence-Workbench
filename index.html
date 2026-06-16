@@ -331,6 +331,46 @@ textarea:focus,input[type=text]:focus,select:focus{border-color:var(--teal);box-
   .main{padding:20px 16px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ════════════════════════════════════════════════════════════════
+   NIKHIL AI LABS — neo-brutalist brand alignment (override layer)
+   ════════════════════════════════════════════════════════════════ */
+:root{ --nb-navy:#1B2D5A; --nb-orange:#FF6B35; --nb-orange-d:#E85420; --nb-cream:#FBF6EC; }
+body{
+  background-color:var(--nb-cream);
+  background-image:radial-gradient(rgba(27,45,90,.10) .6px, transparent .6px);
+  background-size:26px 26px; background-position:-13px -13px;
+}
+.disclaimer{ border-bottom-width:3px; }
+.tb{ background:var(--nb-cream); border-bottom:2.5px solid var(--nb-navy); }
+/* logo → Nikhil AI Labs orange network-mark tile */
+.tb .logo{
+  width:40px; height:40px; background:var(--nb-orange);
+  border:2.5px solid var(--nb-navy); border-radius:11px;
+  box-shadow:3px 3px 0 var(--nb-navy); overflow:visible;
+}
+.tb .logo::after{ display:none; }
+.tb .logo svg{ width:24px; height:24px; display:block; }
+.app-name{ font-weight:800; letter-spacing:-.02em; }
+/* primary action button → brand orange + navy border + hard shadow + press */
+.btn-p{
+  background:var(--nb-orange); border:2.5px solid var(--nb-navy); color:var(--nb-navy);
+  border-radius:11px; box-shadow:3px 3px 0 var(--nb-navy); font-weight:800;
+  transition:transform .1s ease, box-shadow .1s ease, background-color .12s;
+}
+.btn-p:hover{ background:var(--nb-orange-d); transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--nb-navy); }
+.btn-p:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--nb-navy); }
+.btn-p:disabled{ background:#F6B79E; border-color:var(--nb-navy); box-shadow:none; transform:none; }
+.btn-s{ border:2px solid var(--nb-navy); border-radius:10px; box-shadow:2px 2px 0 var(--nb-navy); color:var(--nb-navy); font-weight:700; }
+.btn-s:hover{ background:#fff; transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--nb-navy); }
+.btn-s:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--nb-navy); }
+/* hero surfaces → neo-brutalist signature where it counts */
+.drop-zone{ border:2.5px dashed var(--nb-navy); border-radius:16px; box-shadow:4px 4px 0 var(--nb-navy); }
+.drop-zone:hover,.drop-zone.over{ border-color:var(--teal); box-shadow:5px 5px 0 var(--nb-navy); }
+.dz-title{ font-weight:800; }
+.exec-card,.score-card,.graph-wrap{ border:2.5px solid var(--nb-navy); border-radius:16px; box-shadow:5px 5px 0 var(--nb-navy); }
+.score-box,.file-card{ border:2px solid var(--nb-navy); border-radius:12px; box-shadow:3px 3px 0 var(--nb-navy); }
+/* chunky headings */
+.pg-title{ font-weight:800; }
 </style>
 </head>
 <body>
@@ -343,7 +383,15 @@ textarea:focus,input[type=text]:focus,select:focus{border-color:var(--teal);box-
 <!-- TOPBAR -->
 <div class="tb">
   <div class="tb-left">
-    <div class="logo">IIW</div>
+    <div class="logo" title="Nikhil AI Labs"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <g stroke="#FBF8F2" stroke-width="11" stroke-linecap="round">
+        <line x1="28" y1="27" x2="28" y2="73"/><line x1="72" y1="27" x2="72" y2="73"/>
+        <line x1="28" y1="27" x2="72" y2="73"/><line x1="72" y1="27" x2="28" y2="73"/>
+      </g>
+      <circle cx="28" cy="27" r="12" fill="#FBF8F2"/><circle cx="72" cy="27" r="12" fill="#FBF8F2"/>
+      <circle cx="28" cy="73" r="12" fill="#FBF8F2"/><circle cx="72" cy="73" r="12" fill="#FBF8F2"/>
+      <circle cx="50" cy="50" r="11" fill="#1B2D5A"/>
+    </svg></div>
     <div>
       <div class="app-name">Investigation Intelligence Workbench</div>
       <div class="app-sub" id="tb-status">No case loaded · upload PDF or paste text</div>
