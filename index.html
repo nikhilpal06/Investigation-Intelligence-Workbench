@@ -629,11 +629,11 @@ body{
     <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('veeva')"><div class="ex-tile-icon">🔷</div><div class="ex-tile-nm">Veeva Vault</div><div class="ex-tile-sub">QMS field structure</div></div>
     <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('mastercontrol')"><div class="ex-tile-icon">🔶</div><div class="ex-tile-nm">MasterControl</div><div class="ex-tile-sub">CAPA / deviation fields</div></div>
     <div class="ex-tile" style="border-color:#FF6B35" onclick="exportQMS('generic')"><div class="ex-tile-icon">⬛</div><div class="ex-tile-nm">Generic QMS</div><div class="ex-tile-sub">Universal field map</div></div>
-    <div class="ex-tile" onclick="window.print()"><div class="ex-tile-icon">🖨</div><div class="ex-tile-nm">Print / PDF</div><div class="ex-tile-sub">Full package</div></div>
+    <div class="ex-tile" onclick="kxExportPdf()"><div class="ex-tile-icon">🖨</div><div class="ex-tile-nm">Print / PDF</div><div class="ex-tile-sub">Full package</div></div>
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
     <div class="fl" style="margin:0">Full investigation package preview</div>
-    <button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="window.print()">🖨 Print / PDF</button>
+    <button class="btn btn-s" style="font-size:11px;padding:4px 11px" onclick="kxExportPdf()">🖨 Print / PDF</button>
   </div>
   <pre id="export-preview" style="background:#fff;border:1px solid #E5E3DC;border-radius:9px;padding:14px;font-size:10px;font-family:monospace;line-height:1.7;max-height:380px;overflow-y:auto;white-space:pre-wrap;word-break:break-word">Run analysis first.</pre>
   <div class="pg-actions"><button class="btn btn-s" onclick="goPg(11)">← CAPA options</button><div></div></div>
@@ -641,6 +641,21 @@ body{
 
 </div><!-- /main -->
 </div><!-- /body -->
+
+<script>
+// Branded PDF export — Nikhil AI Labs header + margins (matches the suite standard).
+function kxExportPdf(){
+  var pre = document.getElementById('export-preview');
+  var content = (pre && pre.textContent) ? pre.textContent : 'Run analysis first.';
+  var logo = '<svg viewBox="0 0 500 500" width="42" height="42"><g stroke-width="30" stroke-linecap="round" fill="none"><line x1="125" y1="125" x2="250" y2="250" stroke="#1B2D5A"/><line x1="125" y1="375" x2="250" y2="250" stroke="#1B2D5A"/><line x1="125" y1="125" x2="125" y2="375" stroke="#1B2D5A"/><line x1="375" y1="125" x2="250" y2="250" stroke="#17A2B8"/><line x1="375" y1="375" x2="250" y2="250" stroke="#17A2B8"/><line x1="375" y1="125" x2="375" y2="375" stroke="#17A2B8"/></g><g><circle cx="125" cy="125" r="42" fill="#1B2D5A"/><circle cx="125" cy="375" r="42" fill="#1B2D5A"/><circle cx="375" cy="125" r="42" fill="#17A2B8"/><circle cx="375" cy="375" r="42" fill="#17A2B8"/></g><circle cx="250" cy="250" r="32" fill="#FF6B35"/></svg>';
+  var css = "@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');*{box-sizing:border-box}body{font-family:Montserrat,Arial,sans-serif;color:#333;margin:0;padding:16mm 16mm 0}.kxb{display:flex;align-items:center;gap:14px;border-bottom:3px solid #1B2D5A;padding-bottom:16px;margin-bottom:20px}.kxn{font-weight:900;font-size:18px;color:#1B2D5A}.kxn span{color:#FF6B35}.kxs{font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0F7C8C}.kxm{margin-left:auto;text-align:right;font-size:11px;font-weight:600;color:#6b7280}pre.kxp{white-space:pre-wrap;word-break:break-word;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.55;color:#222;margin:0}.kxf{margin-top:24px;border-top:1.5px solid #e4dbc8;padding-top:10px;font-size:10px;color:#6b7280}@page{margin:16mm 0}";
+  var esc = function(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  var w = window.open('','_blank','width=900,height=1000');
+  if(!w) return;
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Investigation Report</title><style>'+css+'</style></head><body><header class="kxb">'+logo+'<div><div class="kxn">Nikhil <span>AI</span> Labs</div><div class="kxs">Investigation Intelligence Workbench</div></div><div class="kxm">Investigation Report<br>'+new Date().toLocaleDateString()+'</div></header><pre class="kxp">'+esc(content)+'</pre><footer class="kxf">AI-assisted draft — qualified QA review and approval required before entry into any GMP record. · nikhilailabs.com</footer><scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},350);};<\/scr'+'ipt></body></html>');
+  w.document.close();
+}
+</script>
 
 <script>
 // ── STATE ────────────────────────────────────────────────────────────────────
